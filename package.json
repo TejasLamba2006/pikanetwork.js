@@ -1,5 +1,5 @@
 {
-  "name": "pikanetwork",
+  "name": "pikanetwork.js",
   "version": "1.0.1",
   "description": "A package to interact with pikanetwork's API",
   "main": "src/index.js",
