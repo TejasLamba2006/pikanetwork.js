@@ -11,7 +11,7 @@ Welcome to the documentation for the `pikanetwork.js` npm package! This package 
   - [Introduction](#introduction-1)
   - [Usage](#usage)
   - [Methods](#methods)
-- [`Leaderboard` Class](#leaderboard-class)
+- [`LeaderboardSearch` Class](#leaderboardsearch-class)
   - [Introduction](#introduction-2)
   - [Usage](#usage-1)
   - [Methods](#methods-1)
@@ -19,6 +19,10 @@ Welcome to the documentation for the `pikanetwork.js` npm package! This package 
   - [Introduction](#introduction-3)
   - [Usage](#usage-2)
   - [Methods](#methods-2)
+- [`Leaderboard` Class](#leaderboard-class)
+  - [Introduction](#introduction-4)
+  - [Usage](#usage-3)
+  - [Methods](#methods-3)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -152,18 +156,18 @@ Output
 { discord_boosting: false, email_verified: true }
 ```
 
-# `Leaderboard` Class
-The `Leaderboard` class enables you to retrieve leaderboard data for a specific game mode and stat from the PikaNetwork server API.
+# `LeaderboardSearch` Class
+The `LeaderboardSearch` class enables you to retrieve leaderboard data for a specific game mode and stat from the PikaNetwork server API for a particular player.
 
 ## Introduction
-The `Leaderboard` class simplifies the process of fetching leaderboard data, such as Kill Death Ratio (KDR), Final Kill Death Ratio (FKDR), and Win Loss Ratio (WLR) for a player. It abstracts away the complexities of API interactions, allowing developers to seamlessly integrate leaderboard statistics into their applications.
+The `LeaderboardSearch` class simplifies the process of fetching leaderboard data, such as Kill Death Ratio (KDR), Final Kill Death Ratio (FKDR), and Win Loss Ratio (WLR) for a player. It abstracts away the complexities of API interactions, allowing developers to seamlessly integrate leaderboard statistics into their applications.
 
 ## Usage
-To utilize the functionalities provided by the `Leaderboard` class, first, import it into your code:
+To utilize the functionalities provided by the `LeaderboardSearch` class, first, import it into your code:
 ```js
-const { Leaderboard } = require('pikanetwork.js');
+const { LeaderboardSearch } = require('pikanetwork.js');
 ```
-Next, create an instance of the `Leaderboard` class by providing the required parameters:
+Next, create an instance of the `LeaderboardSearch` class by providing the required parameters:
 ```js
 const playerIGN = 'TejasIsPro';
 const interval = 'total';
@@ -172,15 +176,15 @@ const offset = 0;
 const limit = 10;
 const gamemode = 'bedwars';
 
-const leaderboard = new Leaderboard(playerIGN, interval, mode, offset, limit, gamemode);
+const leaderboard = new LeaderboardSearch(playerIGN, interval, mode, offset, limit, gamemode);
 ```
 ## Methods
-- `getLeaderboardData()`: Fetches the leaderboard data from the PikaNetwork API. This method must be called before any other methods in the `Leaderboard` class.
+- `getLeaderboardData()`: Fetches the leaderboard data from the PikaNetwork API. This method must be called before any other methods in the `LeaderboardSearch` class.
 ```js
 const leaderboardData = await leaderboard.getLeaderboardData();
 ```
 Output 
-<details>
+
 ```js
 {
   "Bow kills": {
@@ -338,7 +342,7 @@ Output
     ]
   }
   ```
-</details>
+
 
 - `getKDR()`: This method calculates and returns the Kill Death Ratio (KDR) for the player.
 ```js
@@ -417,6 +421,61 @@ Outputs
     expires: 'N/A'
   }
 ]
+```
+# `Leaderboard` Class
+The `Leaderboard` class allows you to retrieve leaderboard data for a specific game mode and stat from the PikaNetwork server API.
+
+## Introduction
+The `Leaderboard` class simplifies the process of fetching leaderboard data, such as top 10 people with the most kills, top 10 people with the most wins, and top 10 people with the most beds destroyed for a specific game mode. It abstracts away the complexities of API interactions, allowing developers to seamlessly integrate leaderboard statistics into their applications.
+
+## Usage
+To utilize the functionalities provided by the `Leaderboard` class, first, import it into your code:
+```js
+const { Leaderboard } = require('pikanetwork.js');
+```
+Next, create an instance of the `Leaderboard` class by providing the required parameters:
+```js
+const interval = "weekly";
+const mode = "ALL_MODES";
+const stat = "kills";
+const offset = 0;
+const limit = 15;
+const gamemode = "bedwars";
+  
+const leaderboard = new Leaderboard(interval, mode, stat, offset, limit, gamemode);
+```
+## Methods
+- `fetchLeaderboardData()`: Fetches the leaderboard data from the PikaNetwork API. This method must be called before any other methods in the `Leaderboard` class.
+```js
+const leaderboardData = await leaderboard.fetchLeaderboardData();
+```
+Output
+```js
+{
+  metadata: { total: 39830 },
+  entries: [
+    { place: 1, value: '1383', id: 'B0kile_', clan: 'GRUAHS' },
+    { place: 2, value: '1085', id: '204sensei', clan: '204gang' },
+    { place: 3, value: '715', id: 'Salamo_ALG', clan: 'NEXUS' },
+    {
+      place: 4,
+      value: '615',
+      id: 'reeceisdumbYT',
+      clan: 'REECExSOLOS'
+    },
+    { place: 5, value: '591', id: 'TejasLamba', clan: 'Sanatan' },
+    { place: 6, value: '587', id: 'PeeszdaRoolju' },
+    { place: 7, value: '587', id: 'fourtyfive', clan: '987' },
+    { place: 8, value: '565', id: 'hameeeeeed1' },
+    { place: 9, value: '546', id: 'Tajweed', clan: 'Sagri' },
+    { place: 10, value: '537', id: 'Pat4962', clan: 'TryHards' },
+    { place: 11, value: '535', id: 'Rylandin' },
+    { place: 12, value: '512', id: 'VoidFlames_', clan: 'Dreamers' },
+    { place: 13, value: '500', id: 'RedDragonZ81' },
+    { place: 14, value: '485', id: 'divi2224', clan: 'Sanatan' },
+    { place: 15, value: '480', id: 'Vihanda_04', clan: 'Kings' }
+  ]
+}
 ```
 
 # Contributing
