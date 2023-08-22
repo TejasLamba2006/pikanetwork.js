@@ -10,10 +10,7 @@
   },
   "keywords": [],
   "author": "TejasLamba2006",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TejasLamba2006/pikanetwork.js"
-  },
+  "repository":"https://github.com/TejasLamba2006/pikanetwork.js",
   "bugs": {
     "url": "https://github.com/TejasLamba2006/pikanetwork.js/issues"
   },
