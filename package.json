@@ -1,6 +1,6 @@
 {
-  "name": "pikanetwork.js",
-  "version": "0.0.4",
+  "name": "pikanetwork",
+  "version": "0.0.5",
   "description": "A package to interact with pikanetwork's API",
   "main": "src/index.js",
   "scripts": {
@@ -9,6 +9,16 @@
     "start": "node ."
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "TejasLamba2006",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TejasLamba2006/pikanetwork.js"
+  },
+  "bugs": {
+    "url": "https://github.com/TejasLamba2006/pikanetwork.js/issues"
+  },
+  "license": "MIT",
+  "directories": {
+    "test": "test"
+  }
 }
