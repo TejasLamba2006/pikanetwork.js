@@ -8,16 +8,36 @@ class VoteLeaderboard {
       const responseBody = response.data;
       const $ = cheerio.load(responseBody);
 
-      const leaderboard = [];
+      const leaderboard = {
+        voters: [],
+        runnerUps: [],
+      };
 
-      $(".contentRow")
-        .slice(0, 10)
-        .each((index, element) => {
-          const username = $(element).find(".username").text().trim();
-          const value = $(element).find(".username").next().text().trim();
-          console.log(username);
-          leaderboard.push({ position: index + 1, username, value });
+      $(".block-voters .voter.winning").each((index, element) => {
+        const position = $(element).find(".position").first().text();
+
+        const username = $(element).find(".username").text();
+        const votes = $(element).find(".votes span").last().text();
+
+        leaderboard.voters.push({
+          position,
+          username,
+          votes,
         });
+      });
+
+      // Extract data from the runners-up section
+      $(".block.runners-up .voter").each((index, element) => {
+        const position = $(element).find(".position").first().text();
+        const username = $(element).find(".username").text();
+        const votes = $(element).find(".votes span").last().text();
+
+        leaderboard.runnerUps.push({
+          position,
+          username,
+          votes,
+        });
+      });
 
       return leaderboard;
     } catch (error) {
