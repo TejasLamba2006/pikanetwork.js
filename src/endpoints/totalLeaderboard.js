@@ -1,4 +1,4 @@
-const fetch = require("node-fetch"); // Import the fetch function
+const axios = require("axios");
 const config = require("../config.json");
 
 class TotalLeaderboard {
@@ -19,14 +19,14 @@ class TotalLeaderboard {
 
   async fetchLeaderboardData() {
     try {
-      const response = await fetch(this.apiUrl);
+      const response = await axios.get(this.apiUrl);
 
-      if (!response.ok) {
+      if (!response.status === 200) {
         console.error(`${config.prefix} Received an error with status: ${response.status}`);
         throw new Error(`${config.prefix} Error while fetching leaderboard data`);
       }
 
-      const data = await response.json();
+      const data = response.data;
       return data;
     } catch (error) {
       console.error(`${config.prefix} ${error}`);

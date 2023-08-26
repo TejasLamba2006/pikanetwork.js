@@ -3,7 +3,10 @@
   "version": "1.1.2",
   "description": "An easy to use PikaNetwork API wrapper.",
   "main": "src/index.js",
-  "author": "TejasLamba2006",
+  "authors": [
+    "TejasLamba2006",
+    "MrSpeedy35"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "npm install",
@@ -13,8 +16,7 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
-    "cheerio": "^1.0.0-rc.12",
-    "node-fetch": "^2.7.0"
+    "cheerio": "^1.0.0-rc.12"
   },
   "devDependencies": {
     "prettier": "^2.8.8"

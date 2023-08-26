@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+const axios = require("axios");
 const cheerio = require("cheerio");
 const config = require("../config.json");
 
@@ -24,25 +24,25 @@ class Profile {
   async fetchAllData() {
     try {
       const [profileResponse, punishmentResponse] = await Promise.all([
-        fetch(this.apiUrl),
-        fetch(this.punishmentsUrl),
+        axios.get(this.apiUrl),
+        axios.get(this.punishmentsUrl),
       ]);
 
-      if (!profileResponse.ok) {
+      if (!profileResponse.status === 200) {
         throw new Error(
           `${config.prefix} Failed to fetch profile data from the API. Status code: ${profileResponse.status}`
         );
       }
 
-      const profileData = await profileResponse.json();
+      const profileData = profileResponse.data;
 
-      if (!punishmentResponse.ok) {
+      if (!punishmentResponse.status === 200) {
         throw new Error(
           `${config.prefix} Failed to fetch punishment data from the API. Status code: ${punishmentResponse.status}`
         );
       }
 
-      const punishmentHtml = await punishmentResponse.text();
+      const punishmentHtml = punishmentResponse.data;
       const $ = cheerio.load(punishmentHtml);
       const punishmentDates = Array.from($(".row .td._date")).map(
         el => new Date($(el).text().trim())

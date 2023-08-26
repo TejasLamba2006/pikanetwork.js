@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+const axios = require("axios");
 const config = require("../config.json");
 
 class PlayerLeaderboard {
@@ -13,13 +13,17 @@ class PlayerLeaderboard {
 
   async fetchData() {
     if (!this.cachedData) {
-      const response = await fetch(this.apiUrl);
-      if (!response.ok) {
-        throw new Error(`${config.prefix} Received a ${response.status}`);
-      }
-      this.cachedData = await response.json();
-      if (this.cachedData.error) {
-        throw new Error(`${config.prefix} ${this.cachedData.error}`);
+      try {
+        const response = await axios.get(this.apiUrl);
+        if (!response.status === 200) {
+          throw new Error(`${config.prefix} Received a ${response.status}`);
+        }
+        this.cachedData = response.data;
+        if (this.cachedData.error) {
+          throw new Error(`${config.prefix} ${this.cachedData.error}`);
+        }
+      } catch (error) {
+        throw new Error(`${config.prefix} An error occurred: ${error.message}`);
       }
     }
     return this.cachedData;

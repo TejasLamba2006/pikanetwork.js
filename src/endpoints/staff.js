@@ -26,7 +26,8 @@ class Staff {
         );
       }
 
-      const $ = cheerio.load(response.data);
+      const responseBody = response.data;
+      const $ = cheerio.load(responseBody);
       const staff = this.initializeStaffObject();
 
       $("span").each((i, el) => {
