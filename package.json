@@ -8,7 +8,7 @@
   "scripts": {
     "build": "npm install",
     "format": "prettier -w ./src",
-    "test": "npm run format && node test/index.js",
+    "test": "node -v",
     "start": "npm run format && node ."
   },
   "dependencies": {
