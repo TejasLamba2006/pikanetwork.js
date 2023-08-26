@@ -8,7 +8,7 @@
 
 pikanetwork.js is a [NodeJS](https://nodejs.org) module which allows you to interact with the [PikaNework API](https://www.pika-network.net/threads/pikanetwork-api.290646/) easily.
 
-- Written in JavaScript
+- Written in JavaScript, which means it's not broken
 - Frequently updated
 - 100% coverage of PikaNetwork API
 
