@@ -1,21 +1,40 @@
 {
   "name": "pikanetwork.js",
-  "version": "1.0.1",
-  "description": "A package to interact with pikanetwork's API",
+  "version": "1.1.0",
+  "description": "An easy to use PikaNetwork API wrapper.",
   "main": "src/index.js",
+  "author": "TejasLamba2006",
+  "license": "MIT",
   "scripts": {
     "build": "npm install",
-    "test": "node test/index.js",
-    "start": "node ."
+    "format": "prettier -w ./src",
+    "test": "npm run format && node test/index.js",
+    "start": "npm run format && node ."
   },
-  "keywords": [],
-  "author": "TejasLamba2006",
-  "repository":"https://github.com/TejasLamba2006/pikanetwork.js",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cheerio": "^1.0.0-rc.12",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TejasLamba2006/pikanetwork.js"
+  },
   "bugs": {
     "url": "https://github.com/TejasLamba2006/pikanetwork.js/issues"
   },
-  "license": "MIT",
+  "keywords": [
+    "pikanetwork",
+    "pikanetwork-api",
+    "pikanetwork-api-wrapper",
+    "pikanetwork.js",
+    "pikanetwork.ts"
+  ],
   "directories": {
-    "test": "test"
+    "test": "test",
+    "src": "src"
   }
 }

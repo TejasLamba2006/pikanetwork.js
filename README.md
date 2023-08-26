@@ -1,491 +1,168 @@
-# `pikanetwork.js` Documentation
+<div align="center">
 
-Welcome to the documentation for the `pikanetwork.js` npm package! This package provides a simple and convenient way to interact with the PikaNetwork API, allowing you to retrieve player profiles, leaderboard data, and PikaBans information.
+![banner](https://i.ibb.co/3dChy9y/cooltext441822979190041.png)
 
-# Table of Contents
-- [`pikanetwork.js` Documentation](#pikanetworkjs-documentation)
-- [Table of Contents](#table-of-contents)
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [`Profile` Class](#profile-class)
-  - [Introduction](#introduction-1)
-  - [Usage](#usage)
-  - [Methods](#methods)
-- [`LeaderboardSearch` Class](#leaderboardsearch-class)
-  - [Introduction](#introduction-2)
-  - [Usage](#usage-1)
-  - [Methods](#methods-1)
-- [`PikaBansScraper` Class](#pikabansscraper-class)
-  - [Introduction](#introduction-3)
-  - [Usage](#usage-2)
-  - [Methods](#methods-2)
-- [`Leaderboard` Class](#leaderboard-class)
-  - [Introduction](#introduction-4)
-  - [Usage](#usage-3)
-  - [Methods](#methods-3)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-- [Acknowledgements](#acknowledgements)
+## **An easy to use [PikaNetwork API](https://www.pika-network.net/threads/pikanetwork-api.290646/) wrapper.**
 
+[![npm package][npm-img]][npm-url] [![Downloads][downloads-img]][downloads-url] [![Issues][issues-img]][issues-url]
 
-# Introduction
+## About
 
-The `pikanetwork.js` package was created to provide an easy-to-use option for developers who want to integrate PikaNetwork API functionalities into their projects. The PikaNetwork API provides valuable data related to player statistics, leaderboards, and ban information. However, accessing and processing this data can be complex. This library aims to simplify the process by offering intuitive classes and methods that abstract away the API intricacies.
+pikanetwork.js is a [NodeJS](https://nodejs.org) module which allows you to interact with the [PikaNework API](https://www.pika-network.net/threads/pikanetwork-api.290646/) easily.
 
-# Installation
+- Written in JavaScript
+- Frequently updated
+- 100% coverage of PikaNetwork API
 
-You can install the `pikanetwork.js` package via npm:
+## Installation
+
+**Node.js 14+ or newer is required**
 
 ```bash
 npm install pikanetwork.js
+yarn add pikanetwork.js
+pnpm add pikanetwork.js
 ```
-
-# `Profile` Class
-
-The `Profile` class allows you to retrieve a player's profile information from the PikaNetwork server API.
-
-## Introduction
-
-The `Profile` class provides methods to fetch various pieces of information about a player's profile, including friend list, rank information, guild information, last seen information, and other details.
 
 ## Usage
 
-To use the `Profile` class, first, you need to import it into your code:
+### Profile
 
 ```js
-const { Profile } = require('pikanetwork.js');
-```
-Then, you can create an instance of the `Profile` class using a player's in-game name (IGN):
-```js
-const playerIGN = 'TejasIsPro';
-const profile = new Profile(playerIGN);
-```
-## Methods
-- `fetchProfileData()`: Fetches the player's profile data from the PikaNetwork API. This method must be called before any other methods in the `Profile` class.
-```js
-const profileData = await profile.fetchProfileData();
-```
-- `getFriendList()`: Returns an array of the player's friends' IGNs.
-```js
-const friendList = profile.getFriendList();
-```
-Output
+const { Profile } = require("pikanetwork.js");
 
-```js
-[
-  'Emojin',      'divi2224',
-  'saharsh1218', 'RGFLAMERZ',
-  'TejasLamba',  'lqvmr',
-  'wxplo',       'Paradox28',
-  'UnFaZed_',    'pooja'
-]
-```
-- `getRankInfo()`: Returns an object containing the player's rank information, including rank name, rank color, and rank prefix.
-```js
-const rankInfo = await profile.getRankInfo();
-```
-Output
+async function fetchProfile() {
+  const playerIGN = "PikaNetwork";
+  const profile = new Profile(playerIGN);
 
-```js
-{
-  level: 45,
-  experience: 2171,
-  percentage: 52,
-  rankDisplay: '&8[&fIron&8]&f '
-}
-```
-- `getGuildInfo()`: Returns an object containing the player's guild information, including guild name, guild tag, and guild color.
-```js
-const guildInfo = await profile.getGuildInfo();
-```
-Output
-
-```js
-{
-  name: 'Sanatan',
-  tag: 'HINDU',
-  currentTrophies: 0,
-  creationTime: '2023-06-21T10:01:20',
-  members: [
-    { user: [Object], joinDate: '2023-06-23T10:13:48' },
-    { user: [Object], joinDate: '2023-07-04T13:34:05' },
-    { user: [Object], joinDate: '2023-07-25T07:18:41' },
-    { user: [Object], joinDate: '2023-08-10T03:49:17' },
-    { user: [Object], joinDate: '2023-08-10T03:54:04' },
-    { user: [Object], joinDate: '2023-06-21T10:58:36' },
-    { user: [Object], joinDate: '2023-08-18T11:44:30' },
-    { user: [Object], joinDate: '2023-06-23T10:02:29' },
-    { user: [Object], joinDate: '2023-06-28T04:53:20' },
-    { user: [Object], joinDate: '2023-06-21T10:43:39' },
-    { user: [Object], joinDate: '2023-08-10T03:46:17' },
-    { user: [Object], joinDate: '2023-06-28T06:28:14' },
-    { user: [Object], joinDate: '2023-06-21T10:47:31' },
-    { user: [Object], joinDate: '2023-07-05T06:17:27' },
-    { user: [Object], joinDate: '2023-07-09T05:19:53' },
-    { user: [Object], joinDate: '2023-06-21T11:11:27' },
-    { user: [Object], joinDate: '2023-06-21T10:35:08' },
-    { user: [Object], joinDate: '2023-06-21T12:38:49' },
-    { user: [Object], joinDate: '2023-08-20T14:03:48' },
-    { user: [Object], joinDate: '2023-06-21T10:01:20' },
-    { user: [Object], joinDate: '2023-06-21T13:15:21' },
-    { user: [Object], joinDate: '2023-08-10T03:52:36' },
-    { user: [Object], joinDate: '2023-08-10T04:04:01' },
-    { user: [Object], joinDate: '2023-06-26T09:51:33' }
-  ],
-  owner: { username: 'RGFLAMERZ' },
-  leveling: { level: 29, exp: 1794, totalExp: 237460 }
-}
-```
-- `getLastSeenInfo()`: Returns an object containing the player's last time.
-```js
-const lastSeenInfo = await profile.getLastSeenInfo();
-```
-Output
-
-```js
-1692550423423
-```
-- `getOtherThings()`: Gets other miscellaneous information about the player's profile.
-```js
-const otherThings = await profile.getOtherThings();
-```
-Output
-
-```js
-{ discord_boosting: false, email_verified: true }
-```
-
-# `LeaderboardSearch` Class
-The `LeaderboardSearch` class enables you to retrieve leaderboard data for a specific game mode and stat from the PikaNetwork server API for a particular player.
-
-## Introduction
-The `LeaderboardSearch` class simplifies the process of fetching leaderboard data, such as Kill Death Ratio (KDR), Final Kill Death Ratio (FKDR), and Win Loss Ratio (WLR) for a player. It abstracts away the complexities of API interactions, allowing developers to seamlessly integrate leaderboard statistics into their applications.
-
-## Usage
-To utilize the functionalities provided by the `LeaderboardSearch` class, first, import it into your code:
-```js
-const { LeaderboardSearch } = require('pikanetwork.js');
-```
-Next, create an instance of the `LeaderboardSearch` class by providing the required parameters:
-```js
-const playerIGN = 'TejasIsPro';
-const interval = 'total';
-const mode = 'SOLO';
-const offset = 0;
-const limit = 10;
-const gamemode = 'bedwars';
-
-const leaderboard = new LeaderboardSearch(playerIGN, interval, mode, offset, limit, gamemode);
-```
-## Methods
-- `getLeaderboardData()`: Fetches the leaderboard data from the PikaNetwork API. This method must be called before any other methods in the `LeaderboardSearch` class.
-```js
-const leaderboardData = await leaderboard.getLeaderboardData();
-```
-Output 
-
-```js
-{
-  "Bow kills": {
-    "metadata": {
-      "total": 24011
-    },
-    "entries": [
-      {
-        "place": 111,
-        "value": "48",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Kills": {
-    "metadata": {
-      "total": 650578
-    },
-    "entries": [
-      {
-        "place": 3705,
-        "value": "2626",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Games played": {
-    "metadata": {
-      "total": 842232
-    },
-    "entries": [
-      {
-        "place": 10460,
-        "value": "606",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Arrows shot": {
-    "metadata": {
-      "total": 143922
-    },
-    "entries": [
-      {
-        "place": 607,
-        "value": "838",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Highest winstreak reached": {
-    "metadata": {
-      "total": 164600
-    },
-    "entries": [
-      {
-        "place": 8983,
-        "value": "5",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Beds destroyed": {
-    "metadata": {
-      "total": 529821
-    },
-    "entries": [
-      {
-        "place": 8549,
-        "value": "693",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Losses": {
-    "metadata": {
-      "total": 743730
-    },
-    "entries": [
-      {
-        "place": 13377,
-        "value": "360",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Arrows hit": {
-    "metadata": {
-      "total": 115782
-    },
-    "entries": [
-      {
-        "place": 617,
-        "value": "244",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Melee kills": {
-    "metadata": {
-      "total": 358643
-    },
-    "entries": [
-      {
-        "place": 2775,
-        "value": "1885",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Final kills": {
-    "metadata": {
-      "total": 479538
-    },
-    "entries": [
-      {
-        "place": 7396,
-        "value": "627",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Deaths": {
-    "metadata": {
-      "total": 767970
-    },
-    "entries": [
-      {
-        "place": 12583,
-        "value": "1994",
-        "id": "TejasIsPro"
-      }
-    ]
-  },
-  "Void kills": {
-    "metadata": {
-      "total": 505438
-    },
-    "entries": [
-      {
-        "place": 4680,
-        "value": "671",
-      }
-    ]
-  },
-  "Wins": {
-    "metadata": {
-      "total": 300560
-    },
-      {
-        "place": 6284,
-        "value": "150",
-        "id": "TejasIsPro"
-      }
-    ]
+  try {
+    const ranks = await profile.getRankInfo(); // Get information about the player's ranks.
+    const levelling = await profile.getLevellingInfo(); // Get information about the player's network level and rank.
+    const guild = await profile.getGuildInfo(); // Guild information about the player's guild.
+    const friends = await profile.getFriendList(); // Get a list of friends the player has.
+    const joinInfo = await profile.getJoinInfo(); // Get information about the player's estimated first join and last join.
+    const miscInfo = await profile.getMiscInfo(); // Get other miscellaneous information.
+  } catch (error) {
+    console.error("Error fetching data:", error);
   }
-  ```
-
-
-- `getKDR()`: This method calculates and returns the Kill Death Ratio (KDR) for the player.
-```js
-const kdr = leaderboard.getKDR();
-```
-Output
-
-```js
-1.31
-```
-- `getFKDR()`: This method calculates and returns the Final Kill Death Ratio (FKDR) for the player.
-```js
-const fkdr = leaderboard.getFKDR();
-```
-Output
-
-```js
-1.39
-```
-- `getWLR()`: This method calculates and returns the Win Loss Ratio (WLR) for the player.
-```js
-const wlr = leaderboard.getWLR();
-```
-Output
-
-```js
-0.40
-```
-
-# `PikaBansScraper` Class
-The PikaBansScraper class allows you to scrape ban data from the Pika Network bans search page.
-
-## Introduction
-The `PikaBansScraper` class provides an easy-to-use way to retrieve ban information for a given player's in-game name (IGN) by scraping data from the Pika Network bans search page. It utilizes the `node-fetch` and `cheerio` libraries to fetch and parse the HTML content of the bans search page.
-
-## Usage
-To use the `PikaBansScraper` class, first, import it into your code:
-```js
-const { PikaBansScraper } = require('pikanetwork.js');
-```
-Next, create an instance of the PikaBansScraper class using the player's in-game name (IGN):
-```js
-const playerIGN = 'TejasIsPro';
-const bansScraper = new PikaBansScraper(playerIGN);
-```
-## Methods
-- `scrapeBanData(html)`:
-  - `html`: The HTML content of the Pika Network bans search page.
-  - Returns an object containing the player's ban information.
-```js
-const html = ... // HTML content of the bans search page
-const bans = PikaBansScraper.scrapeBanData(html);
-```
-**Note**: This method is automatically called when you call the `getBanData()` method. Also note that this is not required to use am just stating it here for people who want to use it.
-
-- `getBanData()`: Fetches the ban data from the Pika Network bans search page and returns an object containing the player's ban information.
-```js
-const bans = await bansScraper.getBanData();
-```
-
-Outputs
-```js
-[
-    {
-    type: 'ban',
-    staff: 'CONSOLE',
-    reason: '[VL#5] [BedWars] Client Modification (002)',
-    date: 'November 6, 2021, 10:28',
-    expires: 'November 07, 2021, 10:28 (Expired)'
-  },
-  {
-    type: 'kick',
-    staff: 'CONSOLE',
-    reason: '[VL#1] [BedWars] Client Modification (002)',
-    date: 'November 6, 2021, 09:37',
-    expires: 'N/A'
-  }
-]
-```
-# `Leaderboard` Class
-The `Leaderboard` class allows you to retrieve leaderboard data for a specific game mode and stat from the PikaNetwork server API.
-
-## Introduction
-The `Leaderboard` class simplifies the process of fetching leaderboard data, such as top 10 people with the most kills, top 10 people with the most wins, and top 10 people with the most beds destroyed for a specific game mode. It abstracts away the complexities of API interactions, allowing developers to seamlessly integrate leaderboard statistics into their applications.
-
-## Usage
-To utilize the functionalities provided by the `Leaderboard` class, first, import it into your code:
-```js
-const { Leaderboard } = require('pikanetwork.js');
-```
-Next, create an instance of the `Leaderboard` class by providing the required parameters:
-```js
-const interval = "weekly";
-const mode = "ALL_MODES";
-const stat = "kills";
-const offset = 0;
-const limit = 15;
-const gamemode = "bedwars";
-  
-const leaderboard = new Leaderboard(interval, mode, stat, offset, limit, gamemode);
-```
-## Methods
-- `fetchLeaderboardData()`: Fetches the leaderboard data from the PikaNetwork API. This method must be called before any other methods in the `Leaderboard` class.
-```js
-const leaderboardData = await leaderboard.fetchLeaderboardData();
-```
-Output
-```js
-{
-  metadata: { total: 39830 },
-  entries: [
-    { place: 1, value: '1383', id: 'B0kile_', clan: 'GRUAHS' },
-    { place: 2, value: '1085', id: '204sensei', clan: '204gang' },
-    { place: 3, value: '715', id: 'Salamo_ALG', clan: 'NEXUS' },
-    {
-      place: 4,
-      value: '615',
-      id: 'reeceisdumbYT',
-      clan: 'REECExSOLOS'
-    },
-    { place: 5, value: '591', id: 'TejasLamba', clan: 'Sanatan' },
-    { place: 6, value: '587', id: 'PeeszdaRoolju' },
-    { place: 7, value: '587', id: 'fourtyfive', clan: '987' },
-    { place: 8, value: '565', id: 'hameeeeeed1' },
-    { place: 9, value: '546', id: 'Tajweed', clan: 'Sagri' },
-    { place: 10, value: '537', id: 'Pat4962', clan: 'TryHards' },
-    { place: 11, value: '535', id: 'Rylandin' },
-    { place: 12, value: '512', id: 'VoidFlames_', clan: 'Dreamers' },
-    { place: 13, value: '500', id: 'RedDragonZ81' },
-    { place: 14, value: '485', id: 'divi2224', clan: 'Sanatan' },
-    { place: 15, value: '480', id: 'Vihanda_04', clan: 'Kings' }
-  ]
 }
+
+fetchProfile();
 ```
 
-# Contributing
+### Punishments
+
+```js
+const { Punishments } = require("pikanetwork.js");
+
+async function fetchPunishments() {
+  const playerIGN = "MrFrenco";
+  const punishment = new Punishments(playerIGN);
+
+  try {
+    const punishments = await punishment.getPunishments(); // Get a list of all of the player's punishments.
+    const issued = await punishment.getIssuedPunishments(); // Get a list of punishments issued by this player.
+  } catch (error) {
+    console.error("Error fetching punishments:", error);
+  }
+}
+
+fetchPunishments();
+```
+
+### Player Leaderboard
+
+```js
+const { PlayerLeaderboard } = require("pikanetwork.js");
+
+async function fetchPlayerLeaderboard() {
+  const playerIGN = "PikaNetwork";
+  const interval = "total"; // total, monthly, weekly.
+  const mode = "ALL_MODES"; // ALL_MODES, SOLO, DOUBLES, TRIPLES, QUAD.
+  const gamemode = "bedwars";
+  // bedwars, skywars, rankedpractice, unrankedpractice, kitpvp,
+  // classicskyblock, survival, lifesteal, opskyblock, oplifesteal
+  // opfactions, opprison. These are all options for gamemode.
+  const playerLeaderboard = new PlayerLeaderboard(playerIGN, interval, mode, gamemode);
+
+  try {
+    const leaderboard = await playerLeaderboard.getLeaderboardData(); // Get the player's leaderboard based on set parameters.
+    const kdr = await playerLeaderboard.getKDR(); // Get the player's kill/death ratio.
+    const fkdr = await playerLeaderboard.getFKDR(); // Get the player's final kill/final death ratio.
+    const wlr = await playerLeaderboard.getWLR(); // Get the player's win/loss ratio.
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+fetchPlayerLeaderboard();
+```
+
+### Total Leaderboard
+
+```js
+const { TotalLeaderboard } = require("pikanetwork.js");
+
+async function fetchTotalLeaderboard() {
+  const interval = "total"; // total, monthly, weekly.
+  const mode = "ALL_MODES"; // ALL_MODES, SOLO, DOUBLES, TRIPLES, QUAD.
+  const stat = "wins"; // Too many to be listed (varies from game to game).
+  const gamemode = "bedwars";
+  // bedwars, skywars, rankedpractice, unrankedpractice, kitpvp,
+  // classicskyblock, survival, lifesteal, opskyblock, oplifesteal
+  // opfactions, opprison. These are all options for gamemode.
+  const offset = "0";
+  const limit = "25";
+  // The offset is at which postion the leaderboard starts (0 = #1 is the first).
+  // The limit is upto how many players will be shown, the limit is capped at 25.
+  const totalLeaderboard = new TotalLeaderboard(interval, mode, stat, offset, limit, gamemode);
+  try {
+    const leaderboard = await totalLeaderboard.fetchLeaderboardData(); // Get the total leaderboard based on set parameters.
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+fetchTotalLeaderboard();
+```
+
+## Staff
+
+```js
+const { Staff } = require("pikanetwork.js");
+
+async function fetchStaffList() {
+  try {
+    const staff = new Staff();
+    const list = await staff.getStaffList();
+    console.log(list);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+fetchStaffList();
+```
+
+## Contributing
+
 Contributions are welcome! If you have any suggestions or issues, please open an issue or pull request.
 
-# License
-This project is licensed under the MIT License. See the [LICENSE]()
+## License
 
-# Contact
-If you have any questions, feel free to contact me on Discord: `@tejaslamba`
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/TejasLamba2006/pikanetwork.js/blob/main/LICENSE).
 
-# Acknowledgements
-- [PikaNetwork](https://pika-network.net/)
+## Help
+
+If you're having issues with a method, or the wrapper isn't working as expected, you can DM [tejaslamba](https://discord.com/users/1076942240791928875) or [mrspeedy35](https://discord.com/users/994878326319624272) on Discord.
+
+[downloads-img]: https://img.shields.io/npm/dt/pikanetwork.js
+[downloads-url]: https://www.npmtrends.com/pikanetwork.js
+[npm-img]: https://img.shields.io/npm/v/pikanetwork.js
+[npm-url]: https://www.npmjs.com/package/pikanetwork.js
+[issues-img]: https://img.shields.io/github/issues/TejasLamba2006/pikanetwork.js
+[issues-url]: https://github.com/TejasLamba2006/pikanetwork.js/issues
+
+## Acknowledgements
+
+Please note that the data given out by our code belongs to [PikaNetwork](https://pika-network.net/).
