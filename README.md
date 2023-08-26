@@ -1,5 +1,3 @@
-<div align="center">
-
 ![banner](https://i.ibb.co/3dChy9y/cooltext441822979190041.png)
 
 ## **An easy to use [PikaNetwork API](https://www.pika-network.net/threads/pikanetwork-api.290646/) wrapper.**
