@@ -1,6 +1,6 @@
 {
   "name": "pikanetwork.js",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "An easy to use PikaNetwork API wrapper.",
   "main": "src/index.js",
   "author": "TejasLamba2006",
