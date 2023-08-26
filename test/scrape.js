@@ -1,9 +1,9 @@
-const { VoteLeaderboard } = require("../src/index.js");
+const { Forum } = require("../src/index.js");
 
 async function fetchLeaderboard() {
   try {
-    const forum = new VoteLeaderboard();
-    const list = await forum.getLeaderboard();
+    const forum = new Forum();
+    const list = await forum.getForumStatistics();
     console.log(list);
   } catch (error) {
     console.error("Error fetching data:", error);
