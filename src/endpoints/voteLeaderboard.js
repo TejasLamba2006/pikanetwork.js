@@ -4,37 +4,36 @@ const cheerio = require("cheerio");
 class VoteLeaderboard {
   async getLeaderboard() {
     try {
-      const response = await axios.get("https://www.pika-network.net/vote/");
+      const response = await axios.get("https://www.pika-network.net/vote");
       const responseBody = response.data;
-      const $ = cheerio.load(responseBody);
 
-      const extractVoterData = element => {
-        const positionString = $(element).find(".position").first().text();
+      const parseVoterData = element => {
+        const positionString = element.find(".position").first().text();
         const position = parseInt(positionString.replace(/#/g, ""), 10);
-        const username = $(element).find(".username").text();
-        const voteString = $(element).find(".votes span").last().text();
+        const username = element.find(".username").text();
+        const voteString = element.find(".votes span").last().text();
         const votes = parseInt(voteString.replace(/ votes/g, ""), 10);
 
         return { position, username, votes };
       };
 
-      const leaderboard = {
-        voters: [],
-        runnerUps: [],
+      const parseLeaderboard = (html, selector) => {
+        const $ = cheerio.load(html);
+        const leaderboard = [];
+
+        $(selector).each((index, element) => {
+          leaderboard.push(parseVoterData($(element)));
+        });
+
+        return leaderboard;
       };
 
-      $(".block-voters .voter.winning").each((index, element) => {
-        leaderboard.voters.push(extractVoterData(element));
-      });
+      const voters = parseLeaderboard(responseBody, ".block-voters .voter.winning");
+      const runnerUps = parseLeaderboard(responseBody, ".block.runners-up .voter");
 
-      $(".block.runners-up .voter").each((index, element) => {
-        leaderboard.runnerUps.push(extractVoterData(element));
-      });
-
-      return leaderboard;
+      return { voters, runnerUps };
     } catch (error) {
-      console.error("An error occurred:", error);
-      return [];
+      throw new Error("An error occurred");
     }
   }
 }
