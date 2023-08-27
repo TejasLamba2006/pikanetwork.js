@@ -1,6 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const config = require("../config.json");
+const config = require("../jsons/config.json");
+const errorConfig = require("../jsons/error.json");
 
 class Staff {
   constructor() {
@@ -21,16 +22,14 @@ class Staff {
     try {
       const response = await axios.get(url);
       if (response.status !== 200) {
-        throw new Error(
-          `${config.prefix} Received status code ${response.status} while scraping ${url}.`
-        );
+        console.error(`${config.prefix} ${errorConfig.staff}\n ${errorConfig.responseCode}`);
       }
 
+      const staff = this.initializeStaffObject();
       const responseBody = response.data;
       const $ = cheerio.load(responseBody);
-      const staff = this.initializeStaffObject();
 
-      $("span").each((i, el) => {
+      $("span").each((_i, el) => {
         const text = $(el).text().trim().toLowerCase();
         const roleIndex = this.staffRoles.indexOf(text);
         if (roleIndex !== -1) {
@@ -48,8 +47,7 @@ class Staff {
 
   async getStaffList() {
     const url = "https://pika-network.net/staff/";
-    const staff = await this.scrapeStaffList(url);
-    return staff;
+    return await this.scrapeStaffList(url);
   }
 
   initializeStaffObject() {

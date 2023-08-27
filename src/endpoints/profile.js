@@ -1,6 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const config = require("../config.json");
+const config = require("../jsons/config.json");
+const errorConfig = require("../jsons/error.json");
 
 class Profile {
   constructor(playerIGN) {
@@ -9,36 +10,29 @@ class Profile {
     this.punishmentsUrl = `https://pika-network.net/bans/search/${playerIGN}`;
     this.profileData = null;
     this.oldestPunishmentDate = null;
+    this.initialized = false;
   }
 
   async initialize() {
-    try {
-      await this.fetchAllData();
-    } catch (error) {
-      throw new Error(
-        `${config.prefix} An error occurred while initializing the profile. ${error}`
-      );
+    if (this.initialized) {
+      return;
     }
-  }
 
-  async fetchAllData() {
     try {
       const [profileResponse, punishmentResponse] = await Promise.all([
         axios.get(this.apiUrl),
         axios.get(this.punishmentsUrl),
       ]);
 
-      if (!profileResponse.status === 200) {
-        throw new Error(
-          `${config.prefix} Failed to fetch profile data from the API. Status code: ${profileResponse.status}`
-        );
+      if (profileResponse.status !== 200) {
+        throw new Error(`${config.prefix} ${errorConfig.profile}\n ${errorConfig.responseCode}`);
       }
 
       const profileData = profileResponse.data;
 
-      if (!punishmentResponse.status === 200) {
+      if (punishmentResponse.status !== 200) {
         throw new Error(
-          `${config.prefix} Failed to fetch punishment data from the API. Status code: ${punishmentResponse.status}`
+          `${config.prefix} ${errorConfig.punishments}\n ${errorConfig.responseCode}`
         );
       }
 
@@ -48,39 +42,44 @@ class Profile {
         el => new Date($(el).text().trim())
       );
       const oldestPunishmentDate =
-        punishmentDates.length === 0
-          ? null
-          : punishmentDates.reduce((oldest, current) => (current < oldest ? current : oldest));
+        punishmentDates.length === 0 ? null : new Date(Math.min(...punishmentDates));
 
       this.profileData = profileData;
       this.oldestPunishmentDate = oldestPunishmentDate;
+      this.initialized = true;
     } catch (error) {
-      throw new Error(`${config.prefix} An error occurred while fetching data. ${error}`);
+      console.error(`\n${config.prefix} ${errorConfig.profile}\n ${error}`);
+    }
+  }
+
+  async fetchData() {
+    if (!this.initialized) {
+      await this.initialize();
     }
   }
 
   async getFriendList() {
-    await this.initialize();
+    await this.fetchData();
     return this.profileData.friends.map(friend => friend.username);
   }
 
   async getLevellingInfo() {
-    await this.initialize();
+    await this.fetchData();
     return this.profileData.rank;
   }
 
   async getGuildInfo() {
-    await this.initialize();
+    await this.fetchData();
     return this.profileData.clan;
   }
 
   async getRankInfo() {
-    await this.initialize();
+    await this.fetchData();
     return this.profileData.ranks;
   }
 
   async getJoinInfo() {
-    await this.initialize();
+    await this.fetchData();
     const lastSeenFormatted = this.formatDate(this.profileData.lastSeen);
     const oldestPunishmentDateFormatted = this.formatDate(this.oldestPunishmentDate);
 
@@ -93,7 +92,7 @@ class Profile {
   }
 
   async getMiscInfo() {
-    await this.initialize();
+    await this.fetchData();
     return {
       discord_boosting: this.profileData.discord_boosting,
       discord_verified: this.profileData.discord_verified,

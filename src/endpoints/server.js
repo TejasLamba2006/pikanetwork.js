@@ -1,5 +1,6 @@
 const axios = require("axios");
-const config = require("../config.json");
+const config = require("../jsons/config.json");
+const errorConfig = require("../jsons/error.json");
 
 class Server {
   constructor() {
@@ -11,15 +12,12 @@ class Server {
       const serverResponse = await axios.get(this.apiUrl);
 
       if (serverResponse.status !== 200) {
-        throw new Error(
-          `${config.prefix} Failed to fetch server data from the API. Status code: ${serverResponse.status}`
-        );
+        throw new Error(`${config.prefix} ${errorConfig.server}\n${errorConfig.responseCode}`);
       }
 
       const serverData = serverResponse.data;
       const version = serverData.version;
-      const motdData = serverData.motd.clean;
-      const motdLines = motdData.split("\n").map(part => part.trim());
+      const motdLines = serverData.motd.clean.split("\n").map(part => part.trim());
 
       return {
         host: serverData.host,
@@ -34,7 +32,7 @@ class Server {
         srv_record: serverData.srv_record,
       };
     } catch (error) {
-      throw new Error(`${config.prefix} An error occurred while fetching data. ${error}`);
+      console.error(`\n${config.prefix} ${errorConfig.server}\n${error}`);
     }
   }
 }

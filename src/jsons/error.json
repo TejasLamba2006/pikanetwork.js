@@ -1,0 +1,12 @@
+{
+  "forum": "An error occoured while contacting the forums API.",
+  "playerLeaderboard": "An error occoured while fetching the player leaderboard.",
+  "profile": "An error occoured while fetching the player's profile.",
+  "punishments": "An error occoured while fetching data from the punishments API.",
+  "server": "An error occoured while fetching data from the server API.",
+  "staff": "An error occoured while fetching the staff list.",
+  "totalLeaderboard": "An error occoured while fetching the total leaderboard.",
+  "voteLeaderboard": "An error occoured while fetching the vote leaderboard.",
+  "responseCode": "The API didn't return response code 200.",
+  "invalidLeaderboardType": "Invalid leaderboard type in type parameter."
+}

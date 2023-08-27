@@ -1,6 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const config = require("../config.json");
+const config = require("../jsons/config.json");
+const errorConfig = require("../jsons/error.json");
 
 class Punishments {
   constructor(playerIGN) {
@@ -11,14 +12,14 @@ class Punishments {
   async fetchHtml(url) {
     try {
       const response = await axios.get(url);
-      if (!response.status === 200) {
+      if (response.status !== 200) {
         throw new Error(
-          `${config.prefix} Failed to fetch ban data. Status code: ${response.status}`
+          `${config.prefix} ${errorConfig.punishments}\n ${errorConfig.responseCode}`
         );
       }
       return response.data;
     } catch (error) {
-      throw new Error(`${config.prefix} Failed to fetch ban data. ${error.message}`);
+      throw new Error(`${config.prefix} ${errorConfig.punishments}\n ${error}`);
     }
   }
 
@@ -28,16 +29,16 @@ class Punishments {
 
     const propertyName = isIssued ? "player" : "staff";
     $(".row").each((index, element) => {
-      const ban = {};
-
-      ban.type = $(element).find(".td._type b").text().trim();
-      ban[propertyName] = $(element)
-        .find(isIssued ? ".td._user" : ".td._staff")
-        .text()
-        .trim();
-      ban.reason = $(element).find(".td._reason").text().trim();
-      ban.date = $(element).find(".td._date").text().trim();
-      ban.expires = $(element).find(".td._expires").text().trim();
+      const ban = {
+        type: $(element).find(".td._type b").text().trim(),
+        [propertyName]: $(element)
+          .find(isIssued ? ".td._user" : ".td._staff")
+          .text()
+          .trim(),
+        reason: $(element).find(".td._reason").text().trim(),
+        date: $(element).find(".td._date").text().trim(),
+        expires: $(element).find(".td._expires").text().trim(),
+      };
 
       bans.push(ban);
     });
@@ -46,29 +47,15 @@ class Punishments {
   }
 
   async getPunishments() {
-    try {
-      const url = `${this.baseUrl}${this.playerIGN}/`;
-      const html = await this.fetchHtml(url);
-      return this.scrapePunishmentsData(html);
-    } catch (error) {
-      console.error(
-        `${config.prefix} An error occurred while fetching or parsing ban data. ${error}`
-      );
-      throw new Error(`${config.prefix} An error occurred while fetching or parsing ban data.`);
-    }
+    const url = `${this.baseUrl}${this.playerIGN}/`;
+    const html = await this.fetchHtml(url);
+    return this.scrapePunishmentsData(html);
   }
 
   async getIssuedPunishments() {
-    try {
-      const url = `${this.baseUrl}${this.playerIGN}/?filter=issued`;
-      const html = await this.fetchHtml(url);
-      return this.scrapePunishmentsData(html, true);
-    } catch (error) {
-      console.error(
-        `${config.prefix} An error occurred while fetching or parsing ban data. ${error}`
-      );
-      throw new Error(`${config.prefix} An error occurred while fetching or parsing ban data.`);
-    }
+    const url = `${this.baseUrl}${this.playerIGN}/?filter=issued`;
+    const html = await this.fetchHtml(url);
+    return this.scrapePunishmentsData(html, true);
   }
 }
 

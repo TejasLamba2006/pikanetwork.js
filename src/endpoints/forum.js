@@ -1,10 +1,24 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
+const config = require("../jsons/config.json");
+const errorConfig = require("../jsons/error.json");
 
 class Forum {
   constructor() {
-    this.mainUrl = "https://www.pika-network.net/forums/";
-    this.baseUrl = "https://www.pika-network.net/online/";
+    this.baseURL = "https://www.pika-network.net";
+  }
+
+  async fetchData(url) {
+    try {
+      const response = await axios.get(url);
+      if (response.status !== 200) {
+        console.error(`${config.prefix} ${errorConfig.forum}\n ${errorConfig.responseCode}`);
+      }
+      return response.data;
+    } catch (error) {
+      console.error(`${config.prefix} ${errorConfig.forum}\n ${error}`);
+      return null;
+    }
   }
 
   async getOnlineMembers() {
@@ -13,12 +27,14 @@ class Forum {
 
     try {
       while (true) {
-        const url = `${this.baseUrl}?type=member&page=${page}`;
-        const response = await axios.get(url);
-        const $ = cheerio.load(response.data);
+        const url = `${this.baseURL}/online/?type=member&page=${page}`;
+        const data = await this.fetchData(url);
+        if (!data) break;
+
+        const $ = cheerio.load(data);
 
         const usernames = $(".username")
-          .map((index, element) => $(element).text().trim())
+          .map((_, element) => $(element).text().trim())
           .get();
 
         if (usernames.length === 0) {
@@ -37,7 +53,7 @@ class Forum {
         page++;
       }
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.error(`${config.prefix} ${errorConfig.forum}\n ${error}`);
     }
 
     return Array.from(allUsernamesSet);
@@ -45,11 +61,12 @@ class Forum {
 
   async getForumStatistics() {
     try {
-      const response = await axios.get(this.mainUrl);
-      const $ = cheerio.load(response.data);
+      const data = await this.fetchData(`${this.baseURL}/forums/`);
+      if (!data) return {};
 
-      const usersCountRaw = $(".count--users").text();
-      const usersCountFormatted = parseInt(usersCountRaw.replace(/\D/g, ""), 10);
+      const $ = cheerio.load(data);
+
+      const usersCountFormatted = parseInt($(".count--users").text().replace(/\D/g, ""), 10);
       const messagesCount = parseInt($(".count--messages dd").text()?.replace(/,/g, ""), 10);
       const threadsCount = parseInt($(".count--threads dd").text()?.replace(/,/g, ""), 10);
 
@@ -59,8 +76,8 @@ class Forum {
         threads: threadsCount,
       };
     } catch (error) {
-      console.error("An error occurred:", error);
-      return [];
+      console.error(`${config.prefix} ${errorConfig.forum}\n ${error}`);
+      return {};
     }
   }
 
@@ -74,11 +91,16 @@ class Forum {
 
       const key = keyMap[type];
       if (!key) {
-        throw new Error("Invalid leaderboard type");
+        console.error(
+          `${config.prefix} ${errorConfig.forum}\n ${errorConfig.invalidLeaderboardType}`
+        );
+        return [];
       }
 
-      const response = await axios.get(`https://www.pika-network.net/members/?key=${key}`);
-      const $ = cheerio.load(response.data);
+      const data = await this.fetchData(`${this.baseURL}/members/?key=${key}`);
+      if (!data) return [];
+
+      const $ = cheerio.load(data);
 
       const leaderboard = $(".contentRow")
         .map((index, element) => {
@@ -91,7 +113,7 @@ class Forum {
 
       return leaderboard;
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.error(`${config.prefix} ${errorConfig.forum}\n ${error}`);
       return [];
     }
   }
