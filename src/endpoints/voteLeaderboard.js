@@ -3,6 +3,9 @@ const cheerio = require("cheerio");
 const config = require("../jsons/config.json");
 const errorConfig = require("../jsons/error.json");
 
+const axios = require("axios");
+const cheerio = require("cheerio");
+
 class VoteLeaderboard {
   constructor() {
     this.url = "https://www.pika-network.net/vote";
@@ -34,7 +37,7 @@ class VoteLeaderboard {
       const response = await axios.get(this.url);
 
       if (response.status !== 200) {
-        console.error(
+        throw new Error(
           `\n${config.prefix} ${errorConfig.voteLeaderboard}\n ${errorConfig.responseCode}`
         );
       }
@@ -45,7 +48,7 @@ class VoteLeaderboard {
 
       return { voters, runnerUps };
     } catch (error) {
-      console.error(`\n${config.prefix} ${errorConfig.voteLeaderboard}\n ${error}`);
+      throw new Error(`\n${config.prefix} ${errorConfig.voteLeaderboard}\n ${error}`);
     }
   }
 }
