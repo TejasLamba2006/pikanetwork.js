@@ -30,7 +30,7 @@ class Punishments {
 
     const propertyName = isIssued ? "player" : "staff";
     $(".row").each((index, element) => {
-      const $element = $(element); // Cache the jQuery element for better performance
+      const $element = $(element);
       const ban = {
         type: $element.find(".td._type b").text().trim(),
         [propertyName]: $element
