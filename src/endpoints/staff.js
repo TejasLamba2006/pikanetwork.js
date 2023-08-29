@@ -5,7 +5,7 @@ const errorConfig = require("../jsons/error.json");
 
 class Staff {
   constructor() {
-    this.staffRoles = [
+    this.staffRoles = new Set([
       "owner",
       "manager",
       "lead developer",
@@ -15,7 +15,7 @@ class Staff {
       "moderator",
       "helper",
       "trial",
-    ];
+    ]);
   }
 
   async scrapeStaffList(url) {
@@ -26,14 +26,12 @@ class Staff {
       }
 
       const staff = this.initializeStaffObject();
-      const responseBody = response.data;
-      const $ = cheerio.load(responseBody);
+      const $ = cheerio.load(response.data);
 
       $("span").each((_i, el) => {
         const text = $(el).text().trim().toLowerCase();
-        const roleIndex = this.staffRoles.indexOf(text);
-        if (roleIndex !== -1) {
-          const role = this.staffRoles[roleIndex].replace(/\s/g, "");
+        if (this.staffRoles.has(text)) {
+          const role = text.replace(/\s/g, "");
           const username = $(el).prev().text().trim().replace(/\s/g, "");
           staff[role].push(username);
         }
@@ -51,11 +49,12 @@ class Staff {
   }
 
   initializeStaffObject() {
-    return this.staffRoles.reduce((obj, role) => {
+    const staff = {};
+    for (const role of this.staffRoles) {
       const roleName = role.replace(/\s/g, "");
-      obj[roleName] = [];
-      return obj;
-    }, {});
+      staff[roleName] = [];
+    }
+    return staff;
   }
 }
 

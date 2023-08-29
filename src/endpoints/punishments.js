@@ -7,6 +7,7 @@ class Punishments {
   constructor(playerIGN) {
     this.playerIGN = playerIGN;
     this.baseUrl = "https://pika-network.net/bans/search/";
+    this.fetchHtml = this.fetchHtml.bind(this);
   }
 
   async fetchHtml(url) {
@@ -29,15 +30,16 @@ class Punishments {
 
     const propertyName = isIssued ? "player" : "staff";
     $(".row").each((index, element) => {
+      const $element = $(element); // Cache the jQuery element for better performance
       const ban = {
-        type: $(element).find(".td._type b").text().trim(),
-        [propertyName]: $(element)
+        type: $element.find(".td._type b").text().trim(),
+        [propertyName]: $element
           .find(isIssued ? ".td._user" : ".td._staff")
           .text()
           .trim(),
-        reason: $(element).find(".td._reason").text().trim(),
-        date: $(element).find(".td._date").text().trim(),
-        expires: $(element).find(".td._expires").text().trim(),
+        reason: $element.find(".td._reason").text().trim(),
+        date: $element.find(".td._date").text().trim(),
+        expires: $element.find(".td._expires").text().trim(),
       };
 
       bans.push(ban);

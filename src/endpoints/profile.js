@@ -19,36 +19,26 @@ class Profile {
     }
 
     try {
-      const [profileResponse, punishmentResponse] = await Promise.all([
+      const [profileResponse, punishmentResponse] = await axios.all([
         axios.get(this.apiUrl),
         axios.get(this.punishmentsUrl),
       ]);
 
-      if (profileResponse.status !== 200) {
-        throw new Error(`${config.prefix} ${errorConfig.profile}\n ${errorConfig.responseCode}`);
-      }
+      this.handleError(profileResponse, errorConfig.profile);
+      this.handleError(punishmentResponse, errorConfig.punishments);
 
-      const profileData = profileResponse.data;
+      this.profileData = profileResponse.data;
 
-      if (punishmentResponse.status !== 200) {
-        throw new Error(
-          `${config.prefix} ${errorConfig.punishments}\n ${errorConfig.responseCode}`
-        );
-      }
-
-      const punishmentHtml = punishmentResponse.data;
-      const $ = cheerio.load(punishmentHtml);
-      const punishmentDates = Array.from($(".row .td._date")).map(
-        el => new Date($(el).text().trim())
-      );
-      const oldestPunishmentDate =
+      const $ = cheerio.load(punishmentResponse.data);
+      const punishmentDates = $(".row .td._date")
+        .map((_, el) => new Date($(el).text().trim()))
+        .get();
+      this.oldestPunishmentDate =
         punishmentDates.length === 0 ? null : new Date(Math.min(...punishmentDates));
 
-      this.profileData = profileData;
-      this.oldestPunishmentDate = oldestPunishmentDate;
       this.initialized = true;
     } catch (error) {
-      console.error(`\n${config.prefix} ${errorConfig.profile}\n ${error}`);
+      this.handleError(error, errorConfig.responseCode);
     }
   }
 
@@ -114,6 +104,12 @@ class Profile {
     };
 
     return new Date(date).toLocaleString("en-US", options);
+  }
+
+  handleError(response, errorConfigMessage) {
+    if (response.status !== 200) {
+      throw new Error(`${config.prefix} ${errorConfigMessage}\n ${errorConfig.responseCode}`);
+    }
   }
 }
 

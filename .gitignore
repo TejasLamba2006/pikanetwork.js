@@ -1,2 +1,7 @@
 # Installed packages.
 node_modules
+
+# Ignore other locks.
+
+package-lock.json
+yarn.lock

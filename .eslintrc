@@ -21,6 +21,7 @@
   },
   "rules": {
     "no-useless-catch": "off",
-    "no-constant-condition": "off"
+    "no-constant-condition": "off",
+    "no-unused-vars": "off"
   }
 }

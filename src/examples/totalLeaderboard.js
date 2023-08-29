@@ -1,4 +1,4 @@
-const { TotalLeaderboard } = require("../src/index.js");
+const { TotalLeaderboard } = require("pikanetwork.js");
 
 async function fetchTotalLeaderboard() {
   const interval = "total"; // total, monthly, weekly.
@@ -15,7 +15,6 @@ async function fetchTotalLeaderboard() {
   const totalLeaderboard = new TotalLeaderboard(interval, mode, stat, offset, limit, gamemode);
   try {
     const leaderboard = await totalLeaderboard.fetchLeaderboardData(); // Get the total leaderboard based on set parameters.
-    console.log(`Leaderboard: \n${leaderboard}`);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

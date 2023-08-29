@@ -3,25 +3,27 @@ const cheerio = require("cheerio");
 const config = require("../jsons/config.json");
 const errorConfig = require("../jsons/error.json");
 
-const axios = require("axios");
-const cheerio = require("cheerio");
-
 class VoteLeaderboard {
   constructor() {
     this.url = "https://www.pika-network.net/vote";
   }
 
   parseVoterData(element) {
-    const positionString = element.find(".position").first().text();
-    const position = parseInt(positionString.replace(/#/g, ""), 10);
+    const position = parseInt(element.find(".position").first().text().replace(/#/g, ""), 10);
     const username = element.find(".username").text();
-    const voteString = element.find(".votes span").last().text();
-    const votes = parseInt(voteString.replace(/ votes/g, ""), 10);
+    const votes = parseInt(
+      element
+        .find(".votes span")
+        .last()
+        .text()
+        .replace(/ votes/g, ""),
+      10
+    );
 
     return { position, username, votes };
   }
 
-  parseLeaderboard(html, selector) {
+  async parseLeaderboard(html, selector) {
     const $ = cheerio.load(html);
     const leaderboard = [];
 
@@ -38,17 +40,19 @@ class VoteLeaderboard {
 
       if (response.status !== 200) {
         throw new Error(
-          `\n${config.prefix} ${errorConfig.voteLeaderboard}\n ${errorConfig.responseCode}`
+          `${config.prefix} ${errorConfig.voteLeaderboard}\n ${errorConfig.responseCode}`
         );
       }
 
       const responseBody = response.data;
-      const voters = this.parseLeaderboard(responseBody, ".block-voters .voter.winning");
-      const runnerUps = this.parseLeaderboard(responseBody, ".block.runners-up .voter");
+      const [voters, runnerUps] = await Promise.all([
+        this.parseLeaderboard(responseBody, ".block-voters .voter.winning"),
+        this.parseLeaderboard(responseBody, ".block.runners-up .voter"),
+      ]);
 
       return { voters, runnerUps };
     } catch (error) {
-      throw new Error(`\n${config.prefix} ${errorConfig.voteLeaderboard}\n ${error}`);
+      throw new Error(`${config.prefix} ${errorConfig.voteLeaderboard}\n ${error}`);
     }
   }
 }

@@ -1,5 +1,5 @@
 const axios = require("axios");
-const config = require("../jsons/config.json");
+const { prefix } = require("../jsons/config.json");
 const errorConfig = require("../jsons/error.json");
 
 class TotalLeaderboard {
@@ -10,7 +10,6 @@ class TotalLeaderboard {
     this.offset = offset;
     this.limit = limit;
     this.gamemode = gamemode;
-    this.apiUrl = this.generateApiUrl();
   }
 
   generateApiUrl() {
@@ -19,19 +18,17 @@ class TotalLeaderboard {
 
   async fetchLeaderboardData() {
     try {
-      const response = await axios.get(this.apiUrl);
+      const apiUrl = this.generateApiUrl();
+      const response = await axios.get(apiUrl);
 
       if (response.status !== 200) {
-        console.error(
-          `${config.prefix} ${errorConfig.totalLeaderboard}\n ${errorConfig.responseCode}`
-        );
+        console.error(`${prefix} ${errorConfig.totalLeaderboard}\n ${errorConfig.responseCode}`);
         return null;
       }
 
-      const data = response.data;
-      return data;
+      return response.data;
     } catch (error) {
-      console.error(`${config.prefix} ${errorConfig.totalLeaderboard}\n ${error}`);
+      console.error(`${prefix} ${errorConfig.totalLeaderboard}\n ${error}`);
       return null;
     }
   }

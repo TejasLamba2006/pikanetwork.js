@@ -12,17 +12,15 @@
     "build": "pnpm install",
     "lint": "eslint src --ext .js --fix",
     "format": "prettier -w ./src",
-    "lint-test": "eslint test --ext .js --fix",
-    "format-test": "prettier -w ./test",
     "pull": "git pull",
-    "test": "node test/index.js",
+    "test": "node src/test.js",
     "formalint": "pnpm format && pnpm lint",
-    "formalint-test": "pnpm format-test && pnpm lint-test",
     "start": "pnpm formalint && node ."
   },
   "dependencies": {
     "axios": "^1.5.0",
-    "cheerio": "^1.0.0-rc.12"
+    "cheerio": "^1.0.0-rc.12",
+    "dns": "^0.2.2"
   },
   "devDependencies": {
     "eslint": "^8.48.0",

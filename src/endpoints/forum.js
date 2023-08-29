@@ -26,13 +26,15 @@ class Forum {
     let page = 1;
 
     try {
+      const hasNextPageButtonSelector = ".pageNav-jump--next";
+      const hasPrevPageButtonSelector = ".pageNav-jump--prev";
+
       while (true) {
         const url = `${this.baseURL}/online/?type=member&page=${page}`;
         const data = await this.fetchData(url);
         if (!data) break;
 
         const $ = cheerio.load(data);
-
         const usernames = $(".username")
           .map((_, element) => $(element).text().trim())
           .get();
@@ -43,8 +45,8 @@ class Forum {
 
         usernames.forEach(username => allUsernamesSet.add(username));
 
-        const hasNextPageButton = $(".pageNav-jump--next").length > 0;
-        const hasPrevPageButton = $(".pageNav-jump--prev").length > 0;
+        const hasNextPageButton = $(hasNextPageButtonSelector).length > 0;
+        const hasPrevPageButton = $(hasPrevPageButtonSelector).length > 0;
 
         if (!hasNextPageButton && hasPrevPageButton) {
           break;
@@ -65,10 +67,9 @@ class Forum {
       if (!data) return {};
 
       const $ = cheerio.load(data);
-
       const usersCountFormatted = parseInt($(".count--users").text().replace(/\D/g, ""), 10);
-      const messagesCount = parseInt($(".count--messages dd").text()?.replace(/,/g, ""), 10);
-      const threadsCount = parseInt($(".count--threads dd").text()?.replace(/,/g, ""), 10);
+      const messagesCount = parseInt($(".count--messages dd").text().replace(/\D/g, ""), 10);
+      const threadsCount = parseInt($(".count--threads dd").text().replace(/\D/g, ""), 10);
 
       return {
         users: usersCountFormatted,
@@ -101,15 +102,16 @@ class Forum {
       if (!data) return [];
 
       const $ = cheerio.load(data);
+      const contentRows = $(".contentRow").get();
+      const leaderboard = [];
 
-      const leaderboard = $(".contentRow")
-        .map((index, element) => {
-          const username = $(element).find(".username").text().trim();
-          const valueString = $(element).find(".contentRow-extra--largest").text().trim();
-          const value = parseInt(valueString.replace(/,/g, ""), 10);
-          return { position: index + 1, username, value };
-        })
-        .get();
+      for (let index = 0; index < contentRows.length; index++) {
+        const element = contentRows[index];
+        const username = $(element).find(".username").text().trim();
+        const valueString = $(element).find(".contentRow-extra--largest").text().trim();
+        const value = parseInt(valueString.replace(/,/g, ""), 10);
+        leaderboard.push({ position: index + 1, username, value });
+      }
 
       return leaderboard;
     } catch (error) {

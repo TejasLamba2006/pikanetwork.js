@@ -1,4 +1,4 @@
-const { Profile } = require("../src/index.js");
+const { Profile } = require("pikanetwork.js");
 
 async function fetchProfile() {
   const playerIGN = "PikaNetwork";
@@ -11,7 +11,6 @@ async function fetchProfile() {
     const friends = await profile.getFriendList(); // Get a list of friends the player has.
     const joinInfo = await profile.getJoinInfo(); // Get information about the player's estimated first join and last join.
     const miscInfo = await profile.getMiscInfo(); // Get other miscellaneous information.
-    console.log(`${ranks}\n${levelling}\n${guild}\n${friends}\n${joinInfo}\n${miscInfo}`);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
