@@ -6,6 +6,7 @@ const errorConfig = require("../jsons/error.json");
 const axiosInstance = axios.create();
 const defaultApiUrl = "https://api.mcstatus.io/v2/status/java/play.pika-network.net";
 
+
 class Server {
   constructor() {
     this.serverDataCache = new Map();
@@ -19,7 +20,7 @@ class Server {
         } else if (addresses.length > 0) {
           resolve(addresses[0]);
         } else {
-          resolve("0.0.0.0");
+          reject(new Error("No IP address found for the domain."));
         }
       });
     });
@@ -41,7 +42,28 @@ class Server {
       }
 
       if (online == false) {
-        throw new Error(`${config.prefix} ${errorConfig.server}\n ${errorConfig.serverOffline}`);
+        const serverData = {
+          host,
+          ip,
+          port,
+          icon,
+          banner,
+          online: false,
+          software: version.name_clean,
+          protocol: version.protocol,
+          players_online: players.online,
+          players_max: players.max,
+          motd: motdLines,
+          srv_record,
+        };
+
+        if (host === "play.pika-network.net") {
+          serverData.website = "https://pika-network.net/";
+          serverData.discord = "https://discord.gg/pikanetwork";
+        }
+
+        this.serverDataCache.set(apiUrl, serverData);
+        return serverData;
       }
 
       const motdLines = motd.clean.split("\n").map(part => part.trim());
