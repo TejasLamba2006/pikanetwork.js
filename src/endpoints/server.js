@@ -15,7 +15,9 @@ class Server {
         } else if (addresses.length > 0) {
           resolve(addresses[0]);
         } else {
-          reject(new Error(`${config.prefix} ${errorConfig.server}\n${errorConfig.noIPAddressFound}`));
+          reject(
+            new Error(`${config.prefix} ${errorConfig.server}\n${errorConfig.noIPAddressFound}`)
+          );
         }
       });
     });
@@ -59,7 +61,7 @@ class Server {
 
       return serverData;
     } catch (error) {
-      throw new Error(`${config.prefix} ${errorConfig.server}\n${error}`)
+      throw new Error(`${config.prefix} ${errorConfig.server}\n${error}`);
     }
   }
 }

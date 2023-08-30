@@ -36,7 +36,7 @@ class Punishments {
   cleanReason(reason) {
     const minecraftRegex = /(?:^\s+|(&|§)([0-9A-Fa-f])\b|&e[0-9]?\s?|^\[VL[^\]]*\]|^\?\s*)/g;
     const formattingCodesRegex = /(§[0-9a-fk-or])|(&[0-9a-fk-or])/gi;
-    const cleanedReason = reason.replace(minecraftRegex, '').replace(formattingCodesRegex, '');
+    const cleanedReason = reason.replace(minecraftRegex, "").replace(formattingCodesRegex, "");
     return cleanedReason || "N/A";
   }
 
