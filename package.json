@@ -9,13 +9,13 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "pnpm install",
+    "build": "npm install",
     "lint": "eslint src --ext .js --fix",
     "format": "prettier -w ./src",
     "pull": "git pull",
     "test": "node src/test.js",
-    "formalint": "pnpm format && pnpm lint",
-    "start": "pnpm formalint && node ."
+    "formalint": "npm run format && npm run lint",
+    "start": "npm run formalint && node ."
   },
   "dependencies": {
     "axios": "^1.5.0",
