@@ -1,4 +1,4 @@
-name: "publish npm"
+name: "Auto-Publish on NPM"
 on:
   release:
     types: [created]
