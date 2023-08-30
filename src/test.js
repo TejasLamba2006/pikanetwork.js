@@ -1,13 +1,20 @@
-const { Server } = require("./index.js");
+const { Punishments } = require("./index.js");
 
-async function fetchServerData() {
-  const server = new Server();
+async function fetchPunishments() {
+  const playerIGN = "Alparo_";
+  const filter = "ban"; // warn, mute, kick, ban
+  const consoleFilter = false; // true = on, false = off
+  const page = 456; // Page no. of all punishments
+  const punishment = new Punishments(playerIGN);
+
   try {
-    const data = await server.getServerData("play.jartex.fun"); // Get information about the server.
-    console.log(data);
+    const allPunishments = await punishment.getAllPunishments(filter, page, consoleFilter);
+    const playerPunishments = await punishment.getPunishments(filter, consoleFilter);
+    const issuedPunishments = await punishment.getIssuedPunishments(filter);
+    console.log(playerPunishments);
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("Error fetching punishments:", error);
   }
 }
 
-fetchServerData();
+fetchPunishments();

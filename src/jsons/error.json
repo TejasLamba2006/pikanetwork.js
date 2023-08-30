@@ -9,5 +9,8 @@
   "voteLeaderboard": "An error occoured while fetching the vote leaderboard.",
   "responseCode": "The API didn't return response code 200.",
   "invalidLeaderboardType": "Invalid leaderboard type in type parameter. (points/reactionScore/messages)",
-  "serverOffline": "Server is offline or invalid IP."
+  "serverOffline": "Server is offline or invalid IP.",
+  "invalidPunishmentParameterA": "The filter",
+  "invalidPunishmentParameterB": "is invalid. (warning/mute/kick/ban)",
+  "invalidPageParameter": "The page number is invalid."
 }
