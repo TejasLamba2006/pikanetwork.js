@@ -4,8 +4,6 @@ const _ = require("lodash");
 const config = require("../jsons/config.json");
 const errorConfig = require("../jsons/error.json");
 
-const regex = /(?:^\s+|(&|§)([0-9A-Fa-f])\b|&e[0-9]?\s?|^\[VL[^\]]*\]|^\?\s*)/g;
-
 class Punishments {
   constructor(playerIGN) {
     this.playerIGN = playerIGN;
@@ -29,7 +27,10 @@ class Punishments {
   }
 
   cleanReason(reason) {
-    return reason ? reason.replace(regex, "") : "N/A";
+    const minecraftRegex = /(?:^\s+|(&|§)([0-9A-Fa-f])\b|&e[0-9]?\s?|^\[VL[^\]]*\]|^\?\s*)/g;
+    const formattingCodesRegex = /(§[0-9a-fk-or])|(&[0-9a-fk-or])/gi;
+    const cleanedReason = reason.replace(minecraftRegex, '').replace(formattingCodesRegex, '');
+    return cleanedReason || "N/A";
   }
 
   scrapePunishmentsData(html, functionName, filterParam) {
@@ -44,14 +45,14 @@ class Punishments {
           : $element.find(".td._type b").text().trim();
       const staff = $element.find(".td._staff").text().trim() || "N/A";
       const player = $element.find(".td._user").text().trim() || "N/A";
-      const reason = this.cleanReason($element.find(".td._reason").text().trim());
+      const reason = $element.find(".td._reason").text().trim();
       const date = $element.find(".td._date").text().trim();
       const expires = $element.find(".td._expires").text().trim();
       const ban = {
         type,
         player,
         staff,
-        reason,
+        reason: this.cleanReason(reason),
         date,
         expires,
       };
@@ -67,7 +68,7 @@ class Punishments {
     return bans;
   }
 
-  async filterPunishments(punishments, filterParam, consoleParam) {
+  async commonFilterPunishments(punishments, filterParam, consoleParam, typeToRemove) {
     const validFilters = new Set(["warn", "kick", "ban", "mute"]);
 
     let filteredPunishments = _.clone(punishments);
@@ -92,6 +93,10 @@ class Punishments {
       );
     }
 
+    if (typeToRemove) {
+      _.unset(filteredPunishments[0], typeToRemove);
+    }
+
     return filteredPunishments;
   }
 
@@ -100,7 +105,7 @@ class Punishments {
     const html = await this.fetchHtml(url);
     const punishments = this.scrapePunishmentsData(html, "getPunishments", null);
 
-    return this.filterPunishments(punishments, filterParam, consoleParam);
+    return this.commonFilterPunishments(punishments, filterParam, consoleParam, "player");
   }
 
   async getIssuedPunishments(filterParam = null) {
@@ -108,7 +113,7 @@ class Punishments {
     const html = await this.fetchHtml(url);
     const issuedPunishments = this.scrapePunishmentsData(html, "getIssuedPunishments", null);
 
-    return this.filterPunishments(issuedPunishments, filterParam, true);
+    return this.commonFilterPunishments(issuedPunishments, filterParam, true, "staff");
   }
 
   async getAllPunishments(filterParam = "ban", pageParam = 1, includeConsoleParam = true) {
@@ -139,21 +144,7 @@ class Punishments {
     const html = await this.fetchHtml(url);
     const punishments = this.scrapePunishmentsData(html, "getAllPunishments", filterParam);
 
-    let filteredPunishments = punishments;
-
-    if (!includeConsoleParam) {
-      filteredPunishments = _.filter(
-        filteredPunishments,
-        punishment => !punishment.staff.toLowerCase().includes("console")
-      );
-    }
-
-    const filteredByType = _.filter(
-      filteredPunishments,
-      punishment => punishment.type.toLowerCase() === filterParam.toLowerCase()
-    );
-
-    return filteredByType;
+    return this.commonFilterPunishments(punishments, filterParam, includeConsoleParam);
   }
 
   async getMaxPage(filterParam) {
