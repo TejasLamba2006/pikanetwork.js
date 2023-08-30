@@ -4,6 +4,8 @@ const _ = require("lodash");
 const config = require("../jsons/config.json");
 const errorConfig = require("../jsons/error.json");
 
+const regex = /(?:^\s+|(&|§)([0-9A-Fa-f])\b|&e[0-9]?\s?|^\[VL[^\]]*\]|^\?\s*)/g;
+
 class Punishments {
   constructor(playerIGN) {
     this.playerIGN = playerIGN;
@@ -27,14 +29,7 @@ class Punishments {
   }
 
   cleanReason(reason) {
-    return reason
-      ? reason
-          .replace(/^\s+/, "")
-          .replace(/(&|§)([0-9A-Fa-f])\b/g, "")
-          .replace(/&e[0-9]?\s?/g, "")
-          .replace(/^\[VL[^\]]*\]/, "")
-          .replace(/^\?\s*/, "")
-      : "N/A";
+    return reason ? reason.replace(regex, "") : "N/A";
   }
 
   scrapePunishmentsData(html, functionName, filterParam) {
@@ -72,11 +67,7 @@ class Punishments {
     return bans;
   }
 
-  async getPunishments(filterParam = null, consoleParam = true) {
-    const url = `${this.baseUrl}search/${this.playerIGN}/`;
-    const html = await this.fetchHtml(url);
-    const punishments = this.scrapePunishmentsData(html, "getPunishments", null);
-
+  async filterPunishments(punishments, filterParam, consoleParam) {
     const validFilters = new Set(["warn", "kick", "ban", "mute"]);
 
     let filteredPunishments = _.clone(punishments);
@@ -104,23 +95,20 @@ class Punishments {
     return filteredPunishments;
   }
 
+  async getPunishments(filterParam = null, consoleParam = true) {
+    const url = `${this.baseUrl}search/${this.playerIGN}/`;
+    const html = await this.fetchHtml(url);
+    const punishments = this.scrapePunishmentsData(html, "getPunishments", null);
+
+    return this.filterPunishments(punishments, filterParam, consoleParam);
+  }
+
   async getIssuedPunishments(filterParam = null) {
     const url = `${this.baseUrl}search/${this.playerIGN}/?filter=issued`;
     const html = await this.fetchHtml(url);
     const issuedPunishments = this.scrapePunishmentsData(html, "getIssuedPunishments", null);
 
-    const validFilters = new Set(["warn", "kick", "ban", "mute"]);
-
-    if (filterParam && !validFilters.has(filterParam.toLowerCase())) {
-      throw new Error(
-        `${config.prefix} ${errorConfig.punishments}\n${errorConfig.invalidPunishmentParameterA} ${filterParam} ${errorConfig.invalidPunishmentParameterB}`
-      );
-    }
-
-    return _.filter(
-      issuedPunishments,
-      punishment => !filterParam || punishment.type.toLowerCase() === filterParam.toLowerCase()
-    );
+    return this.filterPunishments(issuedPunishments, filterParam, true);
   }
 
   async getAllPunishments(filterParam = "ban", pageParam = 1, includeConsoleParam = true) {
