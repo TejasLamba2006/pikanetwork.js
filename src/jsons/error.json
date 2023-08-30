@@ -12,5 +12,6 @@
   "serverOffline": "Server is offline or invalid IP.",
   "invalidPunishmentParameterA": "The filter",
   "invalidPunishmentParameterB": "is invalid. (warning/mute/kick/ban)",
-  "invalidPageParameter": "The page number is invalid."
+  "invalidPageParameter": "The page number is invalid.",
+  "noIPAddressFound": "No IP address found for the domain."
 }

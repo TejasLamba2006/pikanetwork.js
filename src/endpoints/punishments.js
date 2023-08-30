@@ -8,6 +8,13 @@ class Punishments {
   constructor(playerIGN) {
     this.playerIGN = playerIGN;
     this.baseUrl = "https://pika-network.net/bans/";
+    this.validFilters = new Set(["warn", "kick", "ban", "mute"]);
+    this.filterMap = {
+      warn: "warnings",
+      mute: "mutes",
+      kick: "kicks",
+      ban: "bans",
+    };
   }
 
   async fetchHtml(url) {
@@ -56,12 +63,11 @@ class Punishments {
         date,
         expires,
       };
-      if (functionName == "getPunishments") {
+      if (functionName === "getPunishments") {
         _.unset(ban, "player");
-      } else if (functionName == "getIssuedPunishments") {
+      } else if (functionName === "getIssuedPunishments") {
         _.unset(ban, "staff");
       }
-
       bans.push(ban);
     });
 
@@ -69,8 +75,6 @@ class Punishments {
   }
 
   async commonFilterPunishments(punishments, filterParam, consoleParam, typeToRemove) {
-    const validFilters = new Set(["warn", "kick", "ban", "mute"]);
-
     let filteredPunishments = _.clone(punishments);
 
     if (!consoleParam) {
@@ -81,7 +85,7 @@ class Punishments {
     }
 
     if (filterParam !== null) {
-      if (!validFilters.has(filterParam.toLowerCase())) {
+      if (!this.validFilters.has(filterParam.toLowerCase())) {
         throw new Error(
           `${config.prefix} ${errorConfig.punishments}\n${errorConfig.invalidPunishmentParameterA} ${filterParam} ${errorConfig.invalidPunishmentParameterB}`
         );
@@ -117,16 +121,9 @@ class Punishments {
   }
 
   async getAllPunishments(filterParam = "ban", pageParam = 1, includeConsoleParam = true) {
-    const validFilters = new Set(["warn", "kick", "ban", "mute"]);
-    const filterMap = {
-      warn: "warnings",
-      mute: "mutes",
-      kick: "kicks",
-      ban: "bans",
-    };
-    const rightFilter = filterMap[filterParam.toLowerCase()];
+    const rightFilter = this.filterMap[filterParam.toLowerCase()];
 
-    if (!validFilters.has(filterParam.toLowerCase())) {
+    if (!this.validFilters.has(filterParam.toLowerCase())) {
       throw new Error(
         `${config.prefix} ${errorConfig.punishments}\n${errorConfig.invalidPunishmentParameterA} ${filterParam} ${errorConfig.invalidPunishmentParameterB}`
       );

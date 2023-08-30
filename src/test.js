@@ -11,7 +11,7 @@ async function fetchPunishments() {
     const allPunishments = await punishment.getAllPunishments(filter, page, consoleFilter);
     const playerPunishments = await punishment.getPunishments(filter, consoleFilter);
     const issuedPunishments = await punishment.getIssuedPunishments(filter);
-    console.log(allPunishments);
+    console.log(playerPunishments);
   } catch (error) {
     console.error("Error fetching punishments:", error);
   }
