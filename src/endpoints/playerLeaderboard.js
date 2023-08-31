@@ -1,3 +1,30 @@
+/**
+ * Class representing a PlayerLeaderboard.
+ * Fetches data from an API and calculates various ratios based on the fetched data.
+ *
+ * @constructor
+ * @param {string} playerIGN - The IGN (In-Game Name) of the player.
+ * @param {string} interval - The time interval for the leaderboard data.
+ * @param {string} mode - The mode for the leaderboard data.
+ * @param {string} gamemode - The game mode for the leaderboard data.
+ *
+ * @example
+ * const leaderboard = new PlayerLeaderboard("playerIGN", "interval", "mode", "gamemode");
+ * const data = await leaderboard.getRatioData();
+ * console.log(data);
+ *
+ * @returns {Object} - An object containing various ratios based on the fetched data.
+ *   - killDeathRatio (number): The ratio of kills to deaths.
+ *   - kdrInfo (string): Information about the kills to deaths ratio.
+ *   - winLossRatio (number): The ratio of wins to losses.
+ *   - wlrInfo (string): Information about the wins to losses ratio.
+ *   - winPlayRatio (number): The ratio of wins to games played.
+ *   - wprInfo (string): Information about the wins to games played ratio.
+ *   - arrowsHitShotRatio (number): The ratio of arrows hit to arrows shot.
+ *   - ahsrInfo (string): Information about the arrows hit to arrows shot ratio.
+ *   - finalKillDeathRatio (number, only for "bedwars" gamemode): The ratio of final kills to final deaths.
+ *   - fkdrInfo (string, only for "bedwars" gamemode): Information about the final kills to final deaths ratio.
+ */
 const axios = require("axios");
 const config = require("../jsons/config.json");
 const errorConfig = require("../jsons/error.json");
@@ -12,6 +39,11 @@ class PlayerLeaderboard {
     this.cachedData = null;
   }
 
+  /**
+   * Fetches data from the API if it is not already cached.
+   *
+   * @return {Object|null} The fetched data, or null if an error occurred.
+   */
   async fetchData() {
     if (!this.cachedData) {
       try {
@@ -37,6 +69,14 @@ class PlayerLeaderboard {
     return this.cachedData;
   }
 
+  /**
+   * Calculate the ratio between two entries in the given data.
+   *
+   * @param {string} entryKey1 - The key of the first entry.
+   * @param {string} entryKey2 - The key of the second entry.
+   * @param {object} data - The data object that contains the entries.
+   * @return {number} The calculated ratio between the entries, rounded to 2 decimal places.
+   */
   calculateRatio(entryKey1, entryKey2, data) {
     const entry1Data = data[entryKey1]?.entries;
     const entry2Data = data[entryKey2]?.entries;
@@ -60,10 +100,20 @@ class PlayerLeaderboard {
     }
   }
 
+  /**
+   * Retrieves the leaderboard data asynchronously.
+   *
+   * @return {Promise<any>} A Promise that resolves to the leaderboard data.
+   */
   async getLeaderboardData() {
     return this.fetchData();
   }
 
+  /**
+   * Retrieves ratio data from the server.
+   *
+   * @return {Object} Object containing various ratio values.
+   */
   async getRatioData() {
     const data = await this.fetchData();
 

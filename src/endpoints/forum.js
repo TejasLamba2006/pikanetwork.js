@@ -3,6 +3,12 @@ const cheerio = require("cheerio");
 const config = require("../jsons/config.json");
 const errorConfig = require("../jsons/error.json");
 
+/**
+ * The `Forum` class is responsible for fetching data from a forum website and providing various functionalities related to the forum, such as retrieving online members, forum statistics, and leaderboard information.
+ *
+ * @class
+ * @name Forum
+ */
 class Forum {
   constructor() {
     this.baseURL = "https://www.pika-network.net";
@@ -21,6 +27,11 @@ class Forum {
     }
   }
 
+  /**
+   * Retrieves a list of online members.
+   *
+   * @returns {Array} An array containing the usernames of all online members.
+   */
   async getOnlineMembers() {
     const allUsernamesSet = new Set();
     let page = 1;
@@ -61,6 +72,11 @@ class Forum {
     return Array.from(allUsernamesSet);
   }
 
+  /**
+   * Retrieves the statistics of the forum.
+   *
+   * @return {Object} An object containing the number of users, messages, and threads in the forum.
+   */
   async getForumStatistics() {
     try {
       const data = await this.fetchData(`${this.baseURL}/forums/`);

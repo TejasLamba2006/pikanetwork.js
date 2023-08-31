@@ -7,6 +7,41 @@ const axiosInstance = axios.create();
 const defaultApiUrl = "https://api.mcstatus.io/v2/status/java/play.pika-network.net";
 
 class Server {
+  /**
+   * A class responsible for retrieving data about a Minecraft server.
+   */
+  constructor() {
+    /**
+     * An instance of the Axios library used for making HTTP requests.
+     * @type {AxiosInstance}
+     */
+    this.axiosInstance = axios.create();
+
+    /**
+     * The default API URL for retrieving server data.
+     * @type {string}
+     */
+    this.defaultApiUrl = "https://api.mcstatus.io/v2/status/java/";
+
+    /**
+     * An object containing configuration data loaded from a JSON file.
+     * @type {object}
+     */
+    this.config = {};
+
+    /**
+     * An object containing error message configurations loaded from a JSON file.
+     * @type {object}
+     */
+    this.errorConfig = {};
+  }
+
+  /**
+   * Resolves the domain name of the server to its IP address.
+   * @param {string} domain - The domain name of the server.
+   * @returns {Promise<string>} A promise that resolves to the IP address of the domain.
+   * @throws {Error} If an error occurs or no IP address is found.
+   */
   async getIPAddress(domain) {
     return new Promise((resolve, reject) => {
       dns.resolve4(domain, (err, addresses) => {
@@ -16,22 +51,32 @@ class Server {
           resolve(addresses[0]);
         } else {
           reject(
-            new Error(`${config.prefix} ${errorConfig.server}\n${errorConfig.noIPAddressFound}`)
+            new Error(
+              `${this.config.prefix} ${this.errorConfig.server}\n${this.errorConfig.noIPAddressFound}`
+            )
           );
         }
       });
     });
   }
 
+  /**
+   * Retrieves various information about the server.
+   * @param {string} [serverIP] - The server IP address. If not provided, uses the default API URL.
+   * @returns {Promise<object>} A promise that resolves to an object containing server data.
+   * @throws {Error} If any errors occur during the process.
+   */
   async getServerData(serverIP) {
-    const apiUrl = serverIP ? `https://api.mcstatus.io/v2/status/java/${serverIP}` : defaultApiUrl;
+    const apiUrl = serverIP ? `${this.defaultApiUrl}${serverIP}` : this.defaultApiUrl;
 
     try {
-      const response = await axiosInstance.get(apiUrl);
+      const response = await this.axiosInstance.get(apiUrl);
       const { host, online, players, version, motd, srv_record } = response.data;
 
       if (response.status !== 200) {
-        throw new Error(`${config.prefix} ${errorConfig.server}\n ${errorConfig.responseCode}`);
+        throw new Error(
+          `${this.config.prefix} ${this.errorConfig.server}\n ${this.errorConfig.responseCode}`
+        );
       }
 
       const motdLines = motd.clean.split("\n").map(part => part.trim());
@@ -61,7 +106,7 @@ class Server {
 
       return serverData;
     } catch (error) {
-      throw new Error(`${config.prefix} ${errorConfig.server}\n${error}`);
+      throw new Error(`${this.config.prefix} ${this.errorConfig.server}\n${error}`);
     }
   }
 }

@@ -4,10 +4,23 @@ const config = require("../jsons/config.json");
 const errorConfig = require("../jsons/error.json");
 
 class VoteLeaderboard {
+  /**
+   * Represents a voting leaderboard on a website.
+   * @constructor
+   */
   constructor() {
+    /**
+     * The URL of the voting leaderboard website.
+     * @type {string}
+     */
     this.url = "https://www.pika-network.net/vote";
   }
 
+  /**
+   * Parses the HTML element representing a voter and extracts the position, username, and votes.
+   * @param {Object} element - The HTML element representing a voter.
+   * @returns {Object} - The parsed voter data.
+   */
   parseVoterData(element) {
     const position = parseInt(element.find(".position").first().text().replace(/#/g, ""), 10);
     const username = element.find(".username").text();
@@ -23,6 +36,12 @@ class VoteLeaderboard {
     return { position, username, votes };
   }
 
+  /**
+   * Parses the HTML response and extracts the leaderboard data based on the provided selector.
+   * @param {string} html - The HTML response.
+   * @param {string} selector - The selector to extract the leaderboard data.
+   * @returns {Array} - The parsed leaderboard data.
+   */
   async parseLeaderboard(html, selector) {
     const $ = cheerio.load(html);
     const leaderboard = [];
@@ -34,6 +53,11 @@ class VoteLeaderboard {
     return leaderboard;
   }
 
+  /**
+   * Fetches the leaderboard data from the website, parses it, and returns it in a structured format.
+   * @returns {Object} - The leaderboard data.
+   * @throws {Error} - If there is an error fetching or parsing the leaderboard data.
+   */
   async getLeaderboard() {
     try {
       const response = await axios.get(this.url);
