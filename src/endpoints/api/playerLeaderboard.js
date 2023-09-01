@@ -2,6 +2,9 @@
  * Class representing a PlayerLeaderboard.
  * Fetches data from an API and calculates various ratios based on the fetched data.
  *
+ * @class
+ * @name PlayerLeaderboard
+ *
  * @constructor
  * @param {string} playerIGN - The IGN (In-Game Name) of the player.
  * @param {string} interval - The time interval for the leaderboard data.
@@ -9,9 +12,9 @@
  * @param {string} gamemode - The game mode for the leaderboard data.
  *
  * @example
- * const leaderboard = new PlayerLeaderboard("playerIGN", "interval", "mode", "gamemode");
- * const data = await leaderboard.getRatioData();
- * console.log(data);
+ * const leaderboardClass = new PlayerLeaderboard("playerIGN", "interval", "mode", "gamemode");
+ * const leaderboard = await leaderboardClass.getLeaderboardData();
+ * const ratio = await leaderboardClass.getRatioData();
  *
  * @returns {Object} - An object containing various ratios based on the fetched data.
  *   - killDeathRatio (number): The ratio of kills to deaths.
@@ -26,8 +29,8 @@
  *   - fkdrInfo (string, only for "bedwars" gamemode): Information about the final kills to final deaths ratio.
  */
 const axios = require("axios");
-const config = require("../jsons/config.json");
-const errorConfig = require("../jsons/error.json");
+const config = require("../../jsons/config.json");
+const errorConfig = require("../../jsons/error.json");
 
 class PlayerLeaderboard {
   constructor(playerIGN, interval, mode, gamemode) {

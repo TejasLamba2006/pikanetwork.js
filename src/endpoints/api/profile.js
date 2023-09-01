@@ -1,7 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const config = require("../jsons/config.json");
-const errorConfig = require("../jsons/error.json");
+const config = require("../../jsons/config.json");
+const errorConfig = require("../../jsons/error.json");
 
 /**
  * The `Profile` class is responsible for fetching and providing various information about a player's profile on a gaming platform.

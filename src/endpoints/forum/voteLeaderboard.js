@@ -1,7 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const config = require("../jsons/config.json");
-const errorConfig = require("../jsons/error.json");
+const config = require("../../jsons/config.json");
+const errorConfig = require("../../jsons/error.json");
 
 class VoteLeaderboard {
   /**

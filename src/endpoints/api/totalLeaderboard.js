@@ -1,6 +1,6 @@
 const axios = require("axios");
-const { prefix } = require("../jsons/config.json");
-const errorConfig = require("../jsons/error.json");
+const { prefix } = require("../../jsons/config.json");
+const errorConfig = require("../../jsons/error.json");
 
 class TotalLeaderboard {
   /**

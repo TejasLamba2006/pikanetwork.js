@@ -1,7 +1,7 @@
 const axios = require("axios");
 const dns = require("dns");
-const config = require("../jsons/config.json");
-const errorConfig = require("../jsons/error.json");
+const config = require("../../jsons/config.json");
+const errorConfig = require("../../jsons/error.json");
 
 const axiosInstance = axios.create();
 const defaultApiUrl = "https://api.mcstatus.io/v2/status/java/play.pika-network.net";

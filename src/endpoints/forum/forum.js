@@ -1,14 +1,20 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
-const config = require("../jsons/config.json");
-const errorConfig = require("../jsons/error.json");
-
 /**
- * The `Forum` class is responsible for fetching data from a forum website and providing various functionalities related to the forum, such as retrieving online members, forum statistics, and leaderboard information.
+ * The `Forum` class is responsible for fetching data from the PikaNetwork forums website and providing various functionalities related to the forums, such as retrieving online members, forum statistics, and leaderboard information.
  *
  * @class
  * @name Forum
+ *
+ * @example
+ * const forum = new Forum();
+ * const statistics = await forum.getForumStatistics();
+ * const onlineMembers = await forum.getOnlineMembers();
+ * const leaderboard = await forum.getLeaderboard(type);
  */
+const axios = require("axios");
+const cheerio = require("cheerio");
+const config = require("../../jsons/config.json");
+const errorConfig = require("../../jsons/error.json");
+
 class Forum {
   constructor() {
     this.baseURL = "https://www.pika-network.net";
@@ -28,9 +34,9 @@ class Forum {
   }
 
   /**
-   * Retrieves a list of online members.
+   * Retrieves a list of all online forum members.
    *
-   * @returns {Array} An array containing the usernames of all online members.
+   * @returns {Array} An array containing the usernames of all online forum members.
    */
   async getOnlineMembers() {
     const allUsernamesSet = new Set();
@@ -73,9 +79,9 @@ class Forum {
   }
 
   /**
-   * Retrieves the statistics of the forum.
+   * Retrieves the certain statistics from the forums.
    *
-   * @return {Object} An object containing the number of users, messages, and threads in the forum.
+   * @return {Object} An object containing the number of total users, messages, and threads in the forums.
    */
   async getForumStatistics() {
     try {
@@ -97,7 +103,12 @@ class Forum {
       return {};
     }
   }
-
+  /**
+   * Retrieves the forum leaderboards.
+   *
+   * @param {string} type - The leaderboard to scrape. Valid values are "points", "reactionScore", and "messages".
+   * @return {Object} An object containing the forum leaderboards based on set parameters.
+   */
   async getLeaderboard(type) {
     try {
       const keyMap = {

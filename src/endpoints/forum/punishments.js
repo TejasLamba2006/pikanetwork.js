@@ -1,8 +1,8 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const _ = require("lodash");
-const config = require("../jsons/config.json");
-const errorConfig = require("../jsons/error.json");
+const config = require("../../jsons/config.json");
+const errorConfig = require("../../jsons/error.json");
 
 /**
  * The `Punishments` class is responsible for fetching and filtering punishment data from a website.
@@ -86,22 +86,28 @@ class Punishments {
           ? filterParam
           : $element.find(".td._type b").text().trim();
       const staff = $element.find(".td._staff").text().trim() || "N/A";
+      const staffAvatar = $element.find(".td._staff img").attr("src");
       const player = $element.find(".td._user").text().trim() || "N/A";
       const reason = $element.find(".td._reason").text().trim();
+      const playerAvatar = $element.find(".td._user img").attr("src");
       const date = $element.find(".td._date").text().trim();
       const expires = $element.find(".td._expires").text().trim();
       const ban = {
         type,
         player,
+        playerAvatar: playerAvatar ? playerAvatar.replace("20", "600") : undefined,
         staff,
+        staffAvatar: staffAvatar ? staffAvatar.replace("20", "600") : undefined,
         reason: this.cleanReason(reason),
         date,
         expires,
       };
       if (functionName === "getPunishments") {
         _.unset(ban, "player");
+        _.unset(ban, "playerAvatar");
       } else if (functionName === "getIssuedPunishments") {
         _.unset(ban, "staff");
+        _.unset(ban, "staffAvatar");
       }
       bans.push(ban);
     });
