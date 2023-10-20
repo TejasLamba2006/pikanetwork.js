@@ -9,6 +9,7 @@ const Punishments = require("./endpoints/forum/punishments.js");
 const Staff = require("./endpoints/forum/staff.js");
 const Store = require("./endpoints/forum/store.js");
 const VoteLeaderboard = require("./endpoints/forum/voteLeaderboard.js");
+const Account = require("./endpoints/login/mainClass.js");
 
 // PikaNetwork Discord
 const Discord = require("./endpoints/discord/discord.js");
@@ -31,4 +32,5 @@ module.exports = {
   Discord,
   Guild,
   Server,
+  Account,
 };

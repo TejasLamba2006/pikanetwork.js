@@ -13,5 +13,7 @@
   "invalidPunishmentParameterA": "The filter",
   "invalidPunishmentParameterB": "is invalid. (warning/mute/kick/ban)",
   "invalidPageParameter": "The page number is invalid.",
-  "noIPAddressFound": "No IP address found for the domain."
+  "noIPAddressFound": "No IP address found for the domain.",
+  "xf_session": "Failed to get the xf_session cookie",
+  "xf_user": "Failed to get the xf_user cookie"
 }
