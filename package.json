@@ -23,7 +23,7 @@
     "dns": "^0.2.2",
     "jest": "^29.7.0",
     "lodash": "^4.17.21",
-    "node-html-parser": "^6.1.10"
+    "node-html-parser": "^6.1.11"
   },
   "devDependencies": {
     "eslint": "^8.48.0",
