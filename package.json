@@ -15,7 +15,9 @@
     "pull": "git pull",
     "test": "node src/test.js",
     "formalint": "npm run format && npm run lint",
-    "start": "npm run formalint && node ."
+    "start": "npm run formalint && node .",
+    "prepare": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "dependencies": {
     "axios": "^1.5.1",
@@ -23,7 +25,8 @@
     "dns": "^0.2.2",
     "jest": "^29.7.0",
     "lodash": "^4.17.21",
-    "node-html-parser": "^6.1.10"
+    "node-html-parser": "^6.1.10",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "eslint": "^8.48.0",
@@ -134,5 +137,6 @@
   "directories": {
     "test": "test",
     "src": "src"
-  }
+  },
+  "snyk": true
 }
