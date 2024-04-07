@@ -97,14 +97,14 @@ const GAMEMODES = {
 };
 
 const DEFAULT_FORM = {
-  "question[244]": "", // username
-  "question[111]": "", //game breaker username
-  "question[106]": "", // rule
-  "question[95]": 1, //report type
-  "question[245]": "", // gamemode
-  "question[105]": "", //Evidence
-  "question[101]": "", // extra information
-  "question[246]": "", // timestamp
+  "question[104]": "", // username
+  "question[101]": "", //game breaker username
+  "question[102]": "", // rule
+  "question[103]": 3, //report type
+  "question[105]": "", // gamemode
+  "question[106]": "", //Evidence
+  "question[108]": "", // extra information
+  "question[107]": "", // timestamp
   _xfWithData: 1,
   _xfToken: "",
   _xfResponseType: "json",
