@@ -86,13 +86,14 @@ const GAMEMODES = {
   Factions: 3,
   "Kit-PvP": 4,
   Lifesteal: 5,
-  "OP Factions": 6,
-  "OP Lifesteal": 7,
-  "OP Prison": 8,
-  "OP SkyBlock": 9,
-  Practice: 10,
-  SkyWars: 11,
-  Survival: 12,
+  Lobby: 6,
+  "OP Factions": 7,
+  "OP Lifesteal": 8,
+  "OP Prison": 9,
+  "OP SkyBlock": 10,
+  Practice: 11,
+  SkyWars: 12,
+  Survival: 13,
 };
 
 const DEFAULT_FORM = {
@@ -122,35 +123,47 @@ const DEFAULT_FORM = {
  * @param {Object} cookies - The cookies to be included in the request.
  * @return {Promise<void>} A promise that resolves when the gameplay report is submitted.
  */
-async function gameplayReport(options, cookies) {
-  ["username", "gamebreaker", "rule", "gamemode", "evidence"].forEach(key => {
-    if (!options[key]) throw new Error(`${key} is required`);
+async function gameplayReport (options, cookies) {
+  ["username", "gamebreaker", "rule", "gamemode", "evidence"].forEach((key) => {
+    if (!options[key]) throw new Error(`${ key } is required`);
   });
-  let { username, gamebreaker, rule, gamemode, evidence, extra_information = "" } = options;
+  const {
+    username,
+    gamebreaker,
+    rule,
+    gamemode,
+    evidence,
+    extra_information = "",
+  } = options;
   if (!(gamemode in GAMEMODES))
-    throw new Error("gamemode must be one of [" + Object.keys(GAMEMODES).join(", ") + "]");
+    throw new Error(
+      "gamemode must be one of [" + Object.keys(GAMEMODES).join(", ") + "]",
+    );
   // if (!(rule in RULES))
   //   throw new Error("rule must be one of [" + Object.keys(RULES).join(", ") + "]");
 
   let form = { ...DEFAULT_FORM };
-  form["question[244]"] = username;
-  form["question[111]"] = gamebreaker;
-  form["question[106]"] = rule;
-  form["question[245]"] = GAMEMODES[gamemode];
-  form["question[105]"] = evidence;
-  form["question[101]"] = extra_information;
+  form["question[104]"] = username;
+  form["question[101]"] = gamebreaker;
+  form["question[102]"] = rule;
+  form["question[105]"] = GAMEMODES[gamemode];
+  form["question[106]"] = evidence;
+  form["question[108]"] = extra_information;
 
   form._xfToken = cookies.get("_xfToken");
   form = formConverter(Object.entries(form), true);
-  const response = await fetch("https://pika-network.net/form/player-report.9/submit", {
-    headers: {
-      accept: "application/json, text/javascript, */*; q=0.01",
-      "content-type": "multipart/form-data; boundary=----WebKitFormBoundary",
-      cookie: cookies.toString(),
+  const response = await fetch(
+    "https://pika-network.net/form/player-report.9/submit",
+    {
+      headers: {
+        accept: "application/json, text/javascript, */*; q=0.01",
+        "content-type": "multipart/form-data; boundary=----WebKitFormBoundary",
+        cookie: cookies.toString(),
+      },
+      body: form,
+      method: "POST",
     },
-    body: form,
-    method: "POST",
-  });
+  );
 
   await handleResponse(response);
 }
